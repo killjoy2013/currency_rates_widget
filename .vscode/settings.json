@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "frontend": true,
+    "frontend-tail*": true
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact",
+    "vue-html": "html",
+    "razor": "html",
+    "plaintext": "jade"
+  },
+  "workbench.tree.indent": 24
+}
