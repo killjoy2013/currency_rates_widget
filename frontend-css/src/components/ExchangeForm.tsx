@@ -225,13 +225,7 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
 }
 
 const ExchangeForm = () => {
-  //   const [formState, setFormState] = useState<FormState | undefined>(undefined);
-
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
-
-  //   const selectHandler = (e: CurrencyItemType) => {
-  //     setFormState((previous) => ({ ...previous, currencyFrom: e }));
-  //   };
 
   return (
     <div className={classes.form}>
@@ -272,7 +266,11 @@ const ExchangeForm = () => {
           })
         }
       />
-      <TextInput label="Amount" value={state.amountTo as number} />
+      <TextInput
+        label="Amount"
+        value={state.amountTo as number}
+        currencyItem={state.currencyTo}
+      />
       <Button label="Save" />
     </div>
   );
