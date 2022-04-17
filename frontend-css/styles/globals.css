@@ -5,6 +5,11 @@ body {
   font-family: sans-serif;
   line-height: 1;
   font-weight: 400;
+
+  /*percentage of user's browser font size setting
+  instead of 16px will use 10px equalent
+  */
+  font-size: 62.5%;
   color: #555;
 }
 
