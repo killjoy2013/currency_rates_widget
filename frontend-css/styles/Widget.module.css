@@ -7,7 +7,7 @@
 
 .toolbar {
   display: grid;
-  grid-template-columns: 100rem;
+  /* grid-template-columns: 100rem; */
   grid-template-rows: 1fr 1fr;
   align-items: center;
   justify-content: center;
@@ -30,68 +30,86 @@
   font-family: sans-serif;
 }
 
-.formInput {
-  display: grid;
-  border-radius: 0.6rem;
-  padding: 0.8rem 1rem;
-  font-size: 1.2rem;
-  font-family: sans-serif;
-  height: 3.4rem;
-}
 .equal {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.4rem;
   height: 3.4rem;
   font-size: 1.3rem;
-  background-color: lightblue;
 }
 
 .button {
-  height: 3rem;
-  background-color: aqua;
+  background-color: #4caf50; /* Green */
+  height: 3.4rem;
+  min-width: 10rem;
+  align-items: center;
+  border-radius: 0.6rem;
+  border: none;
+  color: white;
 }
 
-.select {
+.formElement {
+  display: grid;
   position: relative;
+  margin: 0.5rem 0.5rem;
 }
 
 .selectInput {
   display: flex;
   font-size: 1.2rem;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
+  justify-items: flex-start;
   min-width: 20rem;
   height: 3.4rem;
-  border: solid 1px;
+  border: solid 1px #bbb;
   border-radius: 0.6rem;
   background-color: white;
+  cursor: pointer;
+}
+.textInput {
+  border-radius: 0.6rem;
+  height: 3.4rem;
+  /* padding: 0.8rem 1rem; */
+  padding-left: 1rem;
+  font-size: 1.2rem;
+  font-family: sans-serif;
+  border: solid 1px #bbb;
 }
 
 .selectList {
+  display: grid;
   margin-top: 1rem;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   position: absolute;
+  top: 4rem;
+  right: 0;
   min-width: 20rem;
-  height: 40rem;
-  /* background-color: white; */
-  background-color: aqua;
-
+  /* height: 40rem; */
+  background-color: white;
   box-shadow: rgba(149, 157, 165, 0.2) 0rem 1rem 2.4rem;
   border-radius: 0.6rem;
 }
 
 .selectItem {
+  display: flex;
+  /* justify-content: flex-start; */
+  justify-items: flex-start;
+  align-items: center;
   font-size: 1.3rem;
+  padding: 0.8rem 0.1rem;
+  border-bottom: solid 1px #bbb;
 }
 
-/* 
-.option {
-  height: 2rem;
-  border-bottom: 0.5px solid;
-} */
+.selectItem:last-child {
+  border-bottom: 0;
+}
+
+.selectItem:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
 
 .main {
-  background-color: pink;
+  background-color: white;
 }

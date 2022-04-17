@@ -252,7 +252,7 @@ const ExchangeForm = () => {
           })
         }
       />
-      <span className={classes.equal}>=</span>
+      <span className={`${classes.equal} ${classes.formElement}`}>=</span>
       <Select
         name="currency-to"
         value={state.currencyTo as CurrencyItemType}

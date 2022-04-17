@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import classes from "../../../styles/Widget.module.css";
 import { CurrencyItemType } from "../../components/ExchangeForm";
 
@@ -39,6 +40,7 @@ const Modal = (props: ModalProps) => {
           className={classes.selectItem}
           onClick={changeHandler.bind(null, data)}
         >
+          <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} />
           <div>{`${data.abbr} - ${data.name}`}</div>
         </div>
       ))}

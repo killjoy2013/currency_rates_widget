@@ -31,10 +31,10 @@ const TextInput = (props: TextInputProps) => {
   };
 
   return (
-    <div className={classes.formItem}>
+    <div className={classes.formElement}>
       <span className={classes.formLabel}>{label}</span>
       <input
-        className={classes.formInput}
+        className={classes.textInput}
         value={getDisplayText()}
         onChange={(event) => changeHandler(event.target.value)}
       />

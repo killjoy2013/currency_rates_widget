@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import classes from "../../../styles/Widget.module.css";
 import { CurrencyItemType, EventType } from "../../components/ExchangeForm";
 import Modal from "./Modal";
@@ -25,7 +26,7 @@ const Select = (props: SelectProps) => {
   };
 
   return (
-    <div className={`${classes.formItem} ${classes.select}`}>
+    <div className={`${classes.formElement}`}>
       <span className={classes.formLabel}>{label}</span>
       <div
         id="input"
@@ -36,7 +37,8 @@ const Select = (props: SelectProps) => {
           }
         }}
       >
-        {getDisplay(value)}
+        <Image src={`/icons/${value.abbr}.svg`} width={36} height={16} />
+        <span>{getDisplay(value)}</span>
       </div>
       {open && (
         <Modal

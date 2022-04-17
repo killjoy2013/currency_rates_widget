@@ -6,7 +6,7 @@ const Widget = () => {
   return (
     <div className={classes.page}>
       <div className={classes.toolbar}>
-        <section className={classes.title}>Exchange</section>
+        <div className={classes.title}>Exchange</div>
         <ExchangeForm />
       </div>
       <div className={classes.main}>Main</div>
