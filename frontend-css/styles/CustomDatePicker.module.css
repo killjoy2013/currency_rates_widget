@@ -1,5 +1,5 @@
 .datePicker {
-  width: auto;
+  width: auto !important;
 }
 
 .datePicker input {

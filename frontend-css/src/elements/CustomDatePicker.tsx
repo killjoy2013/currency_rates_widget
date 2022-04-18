@@ -6,12 +6,15 @@ import "font-awesome/css/font-awesome.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 type CustomDatePickerProps = {
+  name: string;
   label: string;
+  value: Date;
+  onChange: ({ name, value }: { name: string; value: Date }) => void;
 };
 
 const CustomDatePicker = (props: CustomDatePickerProps) => {
-  const { label } = props;
-  const [startDate, setStartDate] = useState(new Date());
+  const { name, label, value, onChange } = props;
+  //const [startDate, setStartDate] = useState(new Date());
 
   const CustomInput = (
     props: React.HTMLProps<HTMLInputElement>,
@@ -32,8 +35,8 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
     <DatePicker
       wrapperClassName={classes.datePicker}
       customInput={React.createElement(React.forwardRef(CustomInput))}
-      selected={startDate}
-      onChange={(date: Date) => setStartDate(date)}
+      selected={value}
+      onChange={(date: Date) => onChange({ name, value: date })}
     />
   );
 };
