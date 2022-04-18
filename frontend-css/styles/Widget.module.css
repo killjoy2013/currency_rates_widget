@@ -31,7 +31,6 @@
 
 .formLabel {
   font-size: 1.3rem;
-  font-family: sans-serif;
 }
 
 .equal {
@@ -76,7 +75,6 @@
   height: 3.4rem;
   padding-left: 1rem;
   font-size: 1.2rem;
-  font-family: sans-serif;
   border: solid 1px #bbb;
 }
 

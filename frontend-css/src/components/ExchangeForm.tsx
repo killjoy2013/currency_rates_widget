@@ -1,7 +1,7 @@
 import { useCallback, useReducer, useState } from "react";
 import classes from "../../styles/Widget.module.css";
 import Button from "../elements/Button";
-import Select from "../elements/select/Select";
+import Select from "../elements/Select";
 import TextInput from "../elements/TextInput";
 
 export type EventType = {
