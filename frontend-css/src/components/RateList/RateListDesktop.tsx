@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import classes from "../../../styles/RateList.module.css";
 
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
+import DateFilter from "../DateFilter";
 
 const RateListDesktop = () => {
   const [sortAsc, setSortAsc] = useState<boolean>(true);
@@ -9,6 +10,7 @@ const RateListDesktop = () => {
   return (
     <div className={classes.desktop}>
       <div className={classes.titleSmall}>History</div>
+      <DateFilter />
       <table className={classes.table}>
         <thead>
           <tr>

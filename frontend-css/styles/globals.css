@@ -1,7 +1,13 @@
 :root {
+  --primary-color: #49cd5e;
+  --secondary-color: #223cc7;
+  --tertiary-color: #6581a3;
+  --dark-color: #000000;
+  --grey-color: #9c9c9c;
+  --neutral-color: #e1e8ed;
   --exchange-color: #6368df;
   --live-price-color: #5dbe7e;
-  --back-gray: #f5f5f5;
+
   --border-radius-small: 0.3rem;
   --border-radius-big: 0.6rem;
   --responsive-margin: 5rem;

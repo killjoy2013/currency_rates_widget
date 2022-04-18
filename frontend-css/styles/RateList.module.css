@@ -1,13 +1,14 @@
 .desktop {
   display: grid;
   margin-top: 5rem;
-  justify-content: center;
+  justify-content: start;
   font-size: 1.3rem;
+  gap: 4rem;
 }
 
 .table {
   width: 800px;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   border-collapse: collapse;
 }
 
@@ -72,7 +73,7 @@
 .box {
   display: grid;
   align-content: start;
-  background-color: var(--back-gray);
+  background-color: var(--neutral-color);
   border-radius: var(--border-radius-big);
   padding: 1.3rem 1rem;
   gap: 2rem;

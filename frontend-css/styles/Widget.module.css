@@ -2,6 +2,8 @@
   position: relative;
   background-color: white;
   display: grid;
+  padding-left: 30rem;
+  justify-content: start;
 }
 
 .toolbar {
@@ -11,7 +13,7 @@
   /* grid-template-columns: 100rem; */
   /* grid-template-rows: 1fr 1fr; */
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   /* border-bottom: 1px solid; */
   /* background-color: palegoldenrod; */
   box-shadow: 0 1rem 1rem -1rem #333;
@@ -72,7 +74,6 @@
 .textInput {
   border-radius: var(--border-radius-big);
   height: 3.4rem;
-  /* padding: 0.8rem 1rem; */
   padding-left: 1rem;
   font-size: 1.2rem;
   font-family: sans-serif;
@@ -122,7 +123,7 @@
 @media (max-width: 1200px) {
   .page {
     padding: 2rem 1rem;
-    grid-template-rows: auto;
+    justify-content: stretch;
   }
   .toolbar {
     justify-content: stretch;

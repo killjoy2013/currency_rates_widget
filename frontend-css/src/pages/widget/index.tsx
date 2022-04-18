@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "../../../styles/Widget.module.css";
+import DateFilter from "../../components/DateFilter";
 import ExchangeForm from "../../components/ExchangeForm";
 import RateList from "../../components/RateList";
 
@@ -10,6 +11,7 @@ const Widget = () => {
         <div className={classes.title}>Exchange</div>
         <ExchangeForm />
       </div>
+
       <RateList />
     </div>
   );
