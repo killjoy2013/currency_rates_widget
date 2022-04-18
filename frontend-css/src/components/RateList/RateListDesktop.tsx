@@ -11,18 +11,20 @@ const RateListDesktop = () => {
       <div className={classes.titleSmall}>History</div>
       <table className={classes.table}>
         <thead>
-          <td
-            className={`${classes.th} ${classes.sort}`}
-            onClick={() => setSortAsc((prev) => !prev)}
-          >
-            {sortAsc ? <RiSortAsc /> : <RiSortDesc />}
-            <span>Date & Time</span>
-          </td>
-          <td className={classes.th}>Currency From</td>
-          <td className={classes.th}>Amount1</td>
-          <td className={classes.th}>Currency To</td>
-          <td className={classes.th}>Amount2</td>
-          <td className={classes.th}>Type</td>
+          <tr>
+            <td
+              className={`${classes.th} ${classes.sort}`}
+              onClick={() => setSortAsc((prev) => !prev)}
+            >
+              {sortAsc ? <RiSortAsc /> : <RiSortDesc />}
+              <span>Date & Time</span>
+            </td>
+            <td className={classes.th}>Currency From</td>
+            <td className={classes.th}>Amount1</td>
+            <td className={classes.th}>Currency To</td>
+            <td className={classes.th}>Amount2</td>
+            <td className={classes.th}>Type</td>
+          </tr>
         </thead>
         <tbody>
           <tr className={classes.tr}>
