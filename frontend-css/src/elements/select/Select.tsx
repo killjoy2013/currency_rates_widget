@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import classes from "../../../styles/Widget.module.css";
 import { CurrencyItemType, EventType } from "../../components/ExchangeForm";
-import Modal from "./Modal";
+import Modal from "../../components/modals/SelectModal";
 
 type SelectProps = {
   items: CurrencyItemType[];

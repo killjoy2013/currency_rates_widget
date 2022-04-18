@@ -1,3 +1,12 @@
+:root {
+  --exchange-color: #6368df;
+  --live-price-color: #5dbe7e;
+  --back-gray: #f5f5f5;
+  --border-radius-small: 0.3rem;
+  --border-radius-big: 0.6rem;
+  --responsive-margin: 5rem;
+}
+
 html,
 body {
   padding: 0;
@@ -9,7 +18,10 @@ body {
   /*percentage of user's browser font size setting
   instead of 16px will use 10px equalent
   */
-  font-size: 62.5%;
+
+  /* font-size: 62.5%; */
+  font-size: 10px;
+
   color: #555;
 }
 

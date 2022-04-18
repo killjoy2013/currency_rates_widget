@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "../../../styles/Widget.module.css";
 import ExchangeForm from "../../components/ExchangeForm";
+import RateList from "../../components/RateList";
 
 const Widget = () => {
   return (
@@ -9,9 +10,13 @@ const Widget = () => {
         <div className={classes.title}>Exchange</div>
         <ExchangeForm />
       </div>
-      <div className={classes.main}>Main</div>
+      <RateList />
     </div>
   );
 };
+
+export async function getServerSideProps({ req }: { req: any }) {
+  return { props: {} };
+}
 
 export default Widget;

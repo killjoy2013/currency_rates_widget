@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import classes from "../../../styles/Widget.module.css";
-import { CurrencyItemType } from "../../components/ExchangeForm";
+import { CurrencyItemType } from "../ExchangeForm";
 
-type ModalProps = {
+type SelectModalProps = {
   items: CurrencyItemType[];
   onChange: (e: CurrencyItemType) => void;
   closeModal: () => void;
 };
 
-const Modal = (props: ModalProps) => {
+const SelectModal = (props: SelectModalProps) => {
   const { items, onChange, closeModal } = props;
   const ref = useRef<any>(null);
 
@@ -48,4 +48,4 @@ const Modal = (props: ModalProps) => {
   );
 };
 
-export default Modal;
+export default SelectModal;
