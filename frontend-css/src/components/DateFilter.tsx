@@ -1,23 +1,24 @@
 import MyDatePicker from "../elements/CustomDatePicker";
 import classes from "../../styles/DateFilter.module.css";
 import { useState } from "react";
+import DropDown from "../elements/DropDown";
 
 type FormData = {
-  fromDate?: any;
-  toDate?: any;
-  type?: any;
+  fromDate: Date;
+  toDate: Date;
+  type: "All" | "Exchanged" | "Live Price";
 };
 
 const DateFilter = () => {
   const [formData, setFormData] = useState<FormData>({
     fromDate: new Date(),
     toDate: new Date(),
+    type: "All",
   });
 
-  const changeHandler = ({ name, value }: { name: string; value: any }) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log({ name, value });
-  };
+  const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
+
+  const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
 
   return (
     <div className={classes.container}>
@@ -25,13 +26,26 @@ const DateFilter = () => {
         name="fromDate"
         value={formData?.fromDate}
         label="From date"
-        onChange={({ name, value }) => changeHandler({ name, value })}
+        onChange={({ value }) =>
+          setFormData((prev) => ({ ...prev, fromDate: value }))
+        }
       />
       <MyDatePicker
         name="toDate"
         value={formData?.toDate}
         label="To date"
-        onChange={({ name, value }) => changeHandler({ name, value })}
+        onChange={({ value }) =>
+          setFormData((prev) => ({ ...prev, toDate: value }))
+        }
+      />
+      <DropDown<"All" | "Exchanged" | "Live Price">
+        name="currency-to"
+        Row={TypeRow}
+        Selected={TypeSelect}
+        value={formData.type}
+        label="Type"
+        items={["All", "Exchanged", "Live Price"]}
+        onChange={(type) => setFormData((prev) => ({ ...prev, type }))}
       />
     </div>
   );

@@ -1,7 +1,10 @@
 import { useCallback, useReducer, useState } from "react";
-import classes from "../../styles/Widget.module.css";
+import Image from "next/image";
+import styles from "../../styles/ExchangeForm.module.css";
+import genericStyles from "../../styles/Generic.module.css";
+
 import Button from "../elements/Button";
-import Select from "../elements/Select";
+import DropDown from "../elements/DropDown";
 import TextInput from "../elements/TextInput";
 
 export type EventType = {
@@ -224,17 +227,31 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
   }
 }
 
+const Row = ({ data }: { data: CurrencyItemType }) => (
+  <>
+    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} />
+    <div>{`${data.abbr} - ${data.name}`}</div>
+  </>
+);
+
+const Selected = ({ data }: { data: CurrencyItemType }) => (
+  <>
+    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} />
+    <div>{`${data.name}`}</div>
+  </>
+);
+
 const ExchangeForm = () => {
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
-
   return (
-    <div className={classes.form}>
-      <Select
+    <div className={genericStyles.form}>
+      <DropDown<CurrencyItemType>
+        Row={Row}
+        Selected={Selected}
         name="currency-from"
         value={state.currencyFrom as CurrencyItemType}
         label="Currency from"
         items={currencyFromList}
-        show="name"
         onChange={(e) =>
           dispatch({
             payload: { currencyFrom: e },
@@ -252,13 +269,14 @@ const ExchangeForm = () => {
           })
         }
       />
-      <span className={`${classes.equal} ${classes.formElement}`}>=</span>
-      <Select
+      <span className={`${styles.equal} ${genericStyles.formElement}`}>=</span>
+      <DropDown
         name="currency-to"
+        Row={Row}
+        Selected={Selected}
         value={state.currencyTo as CurrencyItemType}
         label="Currency to"
         items={currencyToList}
-        show="abbr"
         onChange={(e) =>
           dispatch({
             payload: { currencyTo: e },

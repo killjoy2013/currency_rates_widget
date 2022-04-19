@@ -10,112 +10,14 @@
   position: relative;
   display: grid;
   min-height: 23rem;
-  /* grid-template-columns: 100rem; */
-  /* grid-template-rows: 1fr 1fr; */
   align-items: center;
   justify-content: start;
-  /* border-bottom: 1px solid; */
-  /* background-color: palegoldenrod; */
   box-shadow: 0 1rem 1rem -1rem #333;
 }
 
 .title {
   font-size: 3rem;
   font-weight: bold;
-}
-
-.form {
-  display: flex;
-  align-items: flex-end;
-}
-
-.formLabel {
-  font-size: 1.3rem;
-}
-
-.equal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3.4rem;
-  font-size: 1.3rem;
-}
-
-.button {
-  background-color: #4caf50; /* Green */
-  height: 3.4rem;
-  min-width: 10rem;
-  align-items: center;
-  border-radius: var(--border-radius-big);
-  border: none;
-  color: white;
-}
-
-.formElement {
-  display: grid;
-  position: relative;
-  margin: 0.5rem 0.5rem;
-}
-
-.selectInput {
-  display: flex;
-  font-size: 1.2rem;
-  align-items: center;
-  justify-content: flex-start;
-  justify-items: flex-start;
-  min-width: 20rem;
-  height: 3.4rem;
-  border: solid 1px #bbb;
-  border-radius: var(--border-radius-big);
-  background-color: white;
-  cursor: pointer;
-}
-.textInput {
-  border-radius: var(--border-radius-big);
-  height: 3.4rem;
-  padding-left: 1rem;
-  font-size: 1.2rem;
-  border: solid 1px #bbb;
-}
-
-.selectList {
-  display: grid;
-  z-index: 1000;
-  margin-top: 1rem;
-  /* padding: 0.5rem; */
-  position: absolute;
-  top: 4rem;
-  right: 0;
-  min-width: 20rem;
-  /* height: 40rem; */
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  border-radius: var(--border-radius-big);
-}
-
-.selectItem {
-  display: flex;
-  /* justify-content: flex-start; */
-  justify-items: flex-start;
-  align-items: center;
-  font-size: 1.3rem;
-  padding: 0.8rem 0.1rem;
-  border-bottom: solid 1px #bbb;
-}
-
-.selectItem:last-child {
-  border-bottom: 0;
-}
-
-.selectItem:hover {
-  background-color: #ddd;
-  cursor: pointer;
-}
-
-.main {
-  background-color: white;
 }
 
 @media (max-width: 1200px) {
@@ -126,19 +28,6 @@
   .toolbar {
     justify-content: stretch;
     align-content: start;
-    gap: 3rem;
-  }
-  .form {
-    display: grid;
-  }
-  .formElement {
-    justify-content: stretch;
-  }
-  .equal {
-    display: none;
-  }
-  .selectList {
-    right: 0;
-    left: 0;
+    gap: var(--gap-between-form-elements);
   }
 }

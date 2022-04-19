@@ -1,4 +1,4 @@
-import classes from "../../styles/Widget.module.css";
+import styles from "../../styles/Button.module.css";
 
 type ButtonProps = {
   label: string;
@@ -7,7 +7,7 @@ type ButtonProps = {
 const Button = (props: ButtonProps) => {
   const { label } = props;
   return (
-    <button className={`${classes.button} ${classes.formElement}`}>
+    <button className={`${styles.button} ${styles.formElement}`}>
       {label}
     </button>
   );

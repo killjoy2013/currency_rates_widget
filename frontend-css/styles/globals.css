@@ -11,6 +11,7 @@
   --border-radius-small: 0.3rem;
   --border-radius-big: 0.6rem;
   --responsive-margin: 5rem;
+  --gap-between-form-elements: 1rem;
 }
 
 html,

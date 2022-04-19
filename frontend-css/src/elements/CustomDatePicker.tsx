@@ -9,7 +9,7 @@ type CustomDatePickerProps = {
   name: string;
   label: string;
   value: Date;
-  onChange: ({ name, value }: { name: string; value: Date }) => void;
+  onChange: ({ value }: { value: Date }) => void;
 };
 
 const CustomDatePicker = (props: CustomDatePickerProps) => {
@@ -36,7 +36,7 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
       wrapperClassName={classes.datePicker}
       customInput={React.createElement(React.forwardRef(CustomInput))}
       selected={value}
-      onChange={(date: Date) => onChange({ name, value: date })}
+      onChange={(date: Date) => onChange({ value: date })}
     />
   );
 };

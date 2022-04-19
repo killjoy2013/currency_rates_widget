@@ -1,4 +1,6 @@
 .container {
   display: flex;
   justify-items: flex-start;
+  align-items: flex-end;
+  gap: var(--gap-between-form-elements);
 }

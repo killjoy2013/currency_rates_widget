@@ -1,0 +1,32 @@
+.selectInput {
+  display: flex;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: flex-start;
+  justify-items: flex-start;
+  min-width: 12rem;
+  height: 3.4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  appearance: none;
+
+  border: solid 1px #bbb;
+  border-radius: var(--border-radius-big);
+  background-color: white;
+  cursor: pointer;
+}
+
+.formElement {
+  display: grid;
+  position: relative;
+  margin: 0.5rem 0.5rem;
+}
+
+.formLabel {
+  font-size: 1.3rem;
+}
+
+.formLabel::after {
+  content: "<>";
+  background-color: orange;
+}

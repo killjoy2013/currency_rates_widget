@@ -1,52 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import classes from "../../styles/Widget.module.css";
-import { CurrencyItemType, EventType } from "../components/ExchangeForm";
-import Modal from "../components/modals/SelectModal";
+import React from "react";
+import styles from "../../styles/Select.module.css";
 
 type SelectProps = {
-  items: CurrencyItemType[];
   label: string;
-  name: string;
-  show: "abbr" | "name";
-  value: CurrencyItemType;
-  onChange: (e: CurrencyItemType) => void;
 };
 
 const Select = (props: SelectProps) => {
-  const { items, label, name, show, value, onChange } = props;
-  const [open, setOpen] = useState(false);
-
-  const getDisplay = (currencyItem: CurrencyItemType | undefined) => {
-    if (currencyItem) {
-      return currencyItem[`${show}`];
-    } else {
-      return "";
-    }
-  };
-
+  const { label } = props;
   return (
-    <div className={`${classes.formElement}`}>
-      <span className={classes.formLabel}>{label}</span>
-      <div
-        id="input"
-        className={classes.selectInput}
-        onClick={(event) => {
-          if (!open) {
-            setOpen(true);
-          }
-        }}
-      >
-        <Image src={`/icons/${value.abbr}.svg`} width={36} height={16} />
-        <span>{getDisplay(value)}</span>
-      </div>
-      {open && (
-        <Modal
-          items={items}
-          onChange={onChange}
-          closeModal={() => setOpen(false)}
-        />
-      )}
+    <div className={styles.formElements}>
+      <span className={styles.formLabel}>{label}</span>
+      <select name="" className={styles.selectInput} id="">
+        <option>OPtion 1</option>
+        <option>OPtion 2</option>
+      </select>
     </div>
   );
 };

@@ -1,4 +1,6 @@
-import classes from "../../styles/Widget.module.css";
+import styles from "../../styles/TextInput.module.css";
+import genericStyles from "../../styles/Generic.module.css";
+
 import { CurrencyItemType } from "../components/ExchangeForm";
 
 type TextInputProps = {
@@ -31,10 +33,10 @@ const TextInput = (props: TextInputProps) => {
   };
 
   return (
-    <div className={classes.formElement}>
-      <span className={classes.formLabel}>{label}</span>
+    <div className={genericStyles.formElement}>
+      <span className={genericStyles.formLabel}>{label}</span>
       <input
-        className={classes.textInput}
+        className={styles.textInput}
         value={getDisplayText()}
         onChange={(event) => changeHandler(event.target.value)}
       />
