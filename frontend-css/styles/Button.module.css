@@ -1,9 +1,17 @@
 .button {
-  background-color: #4caf50; /* Green */
   height: 3.4rem;
   min-width: 10rem;
   align-items: center;
   border-radius: var(--border-radius-big);
   border: none;
   color: white;
+}
+
+.filled {
+  background-color: var(--primary-color);
+}
+.outlined {
+  background-color: white;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
 }

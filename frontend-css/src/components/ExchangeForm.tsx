@@ -1,11 +1,12 @@
-import { useCallback, useReducer, useState } from "react";
 import Image from "next/image";
+import { useReducer, useState } from "react";
 import styles from "../../styles/ExchangeForm.module.css";
 import genericStyles from "../../styles/Generic.module.css";
-
 import Button from "../elements/Button";
 import DropDown from "../elements/DropDown";
 import TextInput from "../elements/TextInput";
+import ExchangeModalContent from "./ExchangeModalContent";
+import Modal from "./Modal";
 
 export type EventType = {
   name: string;
@@ -148,8 +149,8 @@ let mockRatesActual = {
 export type FormState = {
   currencyFrom: CurrencyItemType;
   currencyTo: CurrencyItemType;
-  amountFrom: number;
-  amountTo: number;
+  amountFrom: number | string;
+  amountTo: number | string;
 };
 
 export type Payload = {
@@ -184,12 +185,18 @@ type Action = {
 
 function formStateReducer(oldState: FormState, action: Action): FormState {
   let newState: FormState;
-  //   console.log({ action, oldState });
   const { type, payload } = action;
 
   switch (type) {
     case ActionType.AMOUNT_FROM:
-      newState = { ...oldState, amountFrom: Number(payload.amountFrom) };
+      if ((payload.amountFrom as string).trim() === "") {
+        newState = { ...oldState, amountFrom: "" };
+      } else if (!isNaN(payload.amountFrom as any)) {
+        newState = { ...oldState, amountFrom: Number(payload.amountFrom) };
+      } else {
+        newState = oldState;
+      }
+
       break;
     case ActionType.CURRENCY_FROM:
       newState = {
@@ -221,7 +228,10 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
     if (!target) {
       return newState;
     } else {
-      let amountTo = (newState as FormState)?.amountFrom * target.rate;
+      let amountTo =
+        newState.amountFrom === ""
+          ? ""
+          : (newState.amountFrom as number) * target.rate;
       return { ...newState, amountTo };
     }
   }
@@ -229,20 +239,22 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
 
 const Row = ({ data }: { data: CurrencyItemType }) => (
   <>
-    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} />
+    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} alt="" />
     <div>{`${data.abbr} - ${data.name}`}</div>
   </>
 );
 
 const Selected = ({ data }: { data: CurrencyItemType }) => (
   <>
-    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} />
+    <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} alt="" />
     <div>{`${data.name}`}</div>
   </>
 );
 
 const ExchangeForm = () => {
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className={genericStyles.form}>
       <DropDown<CurrencyItemType>
@@ -289,7 +301,23 @@ const ExchangeForm = () => {
         value={state.amountTo as number}
         currencyItem={state.currencyTo}
       />
-      <Button label="Save" />
+      <Button
+        label="Save"
+        variant="filled"
+        onClick={() => setShowModal(true)}
+      />
+      <Modal
+        show={showModal}
+        title="Exchange"
+        onClose={() => setShowModal(false)}
+      >
+        <ExchangeModalContent
+          date={new Date()}
+          status="Approved"
+          formState={state}
+          onClose={() => setShowModal(false)}
+        />
+      </Modal>
     </div>
   );
 };

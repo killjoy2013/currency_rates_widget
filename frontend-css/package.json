@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/react-datepicker": "^4.4.0",
+    "clsx": "^1.1.1",
     "font-awesome": "^4.7.0",
     "next": "12.1.5",
     "react": "18.0.0",

@@ -1,0 +1,30 @@
+.modal {
+  border-radius: 1rem 1rem 0 0;
+  padding: 2.2rem;
+  z-index: 100;
+  background-color: white;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0 2rem 3rem; */
+}
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-top: 0.5rem;
+  padding-bottom: 2.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: center;
+  background-color: var(--modal-background-color);
+}

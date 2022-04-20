@@ -1,13 +1,31 @@
+import { FunctionComponent } from "react";
+import clsx from "clsx";
 import styles from "../../styles/Button.module.css";
 
 type ButtonProps = {
   label: string;
+  variant: "filled" | "outlined";
+  className?: string;
+  onClick: () => void;
 };
 
-const Button = (props: ButtonProps) => {
-  const { label } = props;
+const Button: FunctionComponent<ButtonProps> = ({
+  onClick,
+  label,
+  variant,
+  className,
+}) => {
   return (
-    <button className={`${styles.button} ${styles.formElement}`}>
+    <button
+      className={clsx(
+        styles.button,
+        styles.formElement,
+        variant == "filled" && styles.filled,
+        variant == "outlined" && styles.outlined,
+        className
+      )}
+      onClick={onClick}
+    >
       {label}
     </button>
   );

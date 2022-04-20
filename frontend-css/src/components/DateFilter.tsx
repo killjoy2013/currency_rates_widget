@@ -2,6 +2,7 @@ import CustomDatePicker from "../elements/CustomDatePicker";
 import styles from "../../styles/DateFilter.module.css";
 import { useState } from "react";
 import DropDown from "../elements/DropDown";
+import Button from "../elements/Button";
 
 type FormData = {
   fromDate: Date;
@@ -46,6 +47,7 @@ const DateFilter = () => {
         items={["All", "Exchanged", "Live Price"]}
         onChange={(type) => setFormData((prev) => ({ ...prev, type }))}
       />
+      <Button label="Filter" variant="outlined" onClick={() => {}} />
     </div>
   );
 };
