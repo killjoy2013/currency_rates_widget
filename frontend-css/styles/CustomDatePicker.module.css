@@ -12,6 +12,10 @@
   width: 12rem;
 }
 
+.react-datepicker__tab-loop input {
+  border: solid 2px salmon !important;
+}
+
 .container {
   display: grid;
   position: relative;
@@ -21,8 +25,4 @@
   position: absolute;
   top: 22px;
   left: 95px;
-}
-
-.formLabel {
-  font-size: 1.3rem;
 }

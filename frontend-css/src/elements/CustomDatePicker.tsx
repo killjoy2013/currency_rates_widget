@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { AiOutlineCalendar } from "react-icons/ai";
 import DatePicker from "react-datepicker";
-import classes from "../../styles/CustomDatePicker.module.css";
+import styles from "../../styles/CustomDatePicker.module.css";
+import genericStyles from "../../styles/Generic.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -14,7 +15,6 @@ type CustomDatePickerProps = {
 
 const CustomDatePicker = (props: CustomDatePickerProps) => {
   const { name, label, value, onChange } = props;
-  //const [startDate, setStartDate] = useState(new Date());
 
   const CustomInput = (
     props: React.HTMLProps<HTMLInputElement>,
@@ -22,10 +22,10 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
   ) => {
     return (
       <div>
-        <div className={classes.container}>
-          <span className={classes.formLabel}>{label}</span>
+        <div id={name} className={styles.container}>
+          <span className={genericStyles.formLabel}>{label}</span>
           <input type="text" {...props} />
-          <AiOutlineCalendar className={classes.icon} />
+          <AiOutlineCalendar className={styles.icon} />
         </div>
       </div>
     );
@@ -33,7 +33,7 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
 
   return (
     <DatePicker
-      wrapperClassName={classes.datePicker}
+      wrapperClassName={styles.datePicker}
       customInput={React.createElement(React.forwardRef(CustomInput))}
       selected={value}
       onChange={(date: Date) => onChange({ value: date })}

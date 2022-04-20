@@ -1,5 +1,5 @@
-import MyDatePicker from "../elements/CustomDatePicker";
-import classes from "../../styles/DateFilter.module.css";
+import CustomDatePicker from "../elements/CustomDatePicker";
+import styles from "../../styles/DateFilter.module.css";
 import { useState } from "react";
 import DropDown from "../elements/DropDown";
 
@@ -17,12 +17,11 @@ const DateFilter = () => {
   });
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
-
   const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
 
   return (
-    <div className={classes.container}>
-      <MyDatePicker
+    <div className={styles.container}>
+      <CustomDatePicker
         name="fromDate"
         value={formData?.fromDate}
         label="From date"
@@ -30,7 +29,7 @@ const DateFilter = () => {
           setFormData((prev) => ({ ...prev, fromDate: value }))
         }
       />
-      <MyDatePicker
+      <CustomDatePicker
         name="toDate"
         value={formData?.toDate}
         label="To date"
