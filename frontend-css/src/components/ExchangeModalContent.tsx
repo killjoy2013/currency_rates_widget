@@ -24,10 +24,14 @@ const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
     return (
       <>
         <div className={styles.totalAmount}>
-          <strong>{getCurrencyDisplayText(amountTo, currencyTo.abbr)}</strong>
+          <strong>
+            {getCurrencyDisplayText(amountTo as number, currencyTo.abbr)}
+          </strong>
           &nbsp; &nbsp; &nbsp;
           <div>
-            {`${currencyFrom.abbr} ${getCurrencyDisplayText(amountFrom)}`}
+            {`${currencyFrom.abbr} ${getCurrencyDisplayText(
+              amountFrom as number
+            )}`}
           </div>
         </div>
       </>
