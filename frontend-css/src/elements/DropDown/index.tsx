@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import genericStyles from "../../../styles/Generic.module.css";
 import styles from "../../../styles/DropDown.module.css";
 import { CurrencyItemType, EventType } from "../../components/ExchangeForm";
@@ -31,6 +32,9 @@ function DropDown<T>(props: DropDownProps<T>) {
           }
         }}
       >
+        {open && <RiArrowUpSFill className={styles.arrow} />}
+        {!open && <RiArrowDownSFill className={styles.arrow} />}
+
         <Selected data={value} />
       </div>
       {open && (

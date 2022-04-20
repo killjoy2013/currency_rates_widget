@@ -46,6 +46,11 @@
   cursor: pointer;
 }
 
+.arrow {
+  position: absolute;
+  right: 1rem;
+}
+
 @media (max-width: 1200px) {
   .selectList {
     right: 0;

@@ -281,7 +281,7 @@ const ExchangeForm = () => {
           })
         }
       />
-      <span className={`${styles.equal} ${genericStyles.formElement}`}>=</span>
+      <span className={`${styles.equal}`}>=</span>
       <DropDown
         name="currency-to"
         Row={Row}
