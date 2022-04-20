@@ -3,6 +3,9 @@
     "frontend": true,
     "frontend-tail*": true
   },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#076b10"
+  },
   "emmet.triggerExpansionOnTab": true,
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",

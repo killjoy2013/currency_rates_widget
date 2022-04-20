@@ -3,6 +3,7 @@ import classes from "../../../styles/RateList.module.css";
 
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import DateFilter from "../DateFilter";
+import Pagination from "../Pagination";
 
 const RateListDesktop = () => {
   const [sortAsc, setSortAsc] = useState<boolean>(true);
@@ -53,8 +54,68 @@ const RateListDesktop = () => {
             <td className={classes.td}>56.000,00</td>
             <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
           </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>22/01/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>1</td>
+            <td className={classes.td}>USD</td>
+            <td className={classes.td}>48.000,00</td>
+            <td className={`${classes.td} ${classes.livePrice}`}>Live Price</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>22/01/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>2</td>
+            <td className={classes.td}>EUR</td>
+            <td className={classes.td}>56.000,00</td>
+            <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>25/04/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>2</td>
+            <td className={classes.td}>EUR</td>
+            <td className={classes.td}>56.000,00</td>
+            <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>22/01/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>1</td>
+            <td className={classes.td}>USD</td>
+            <td className={classes.td}>48.000,00</td>
+            <td className={`${classes.td} ${classes.livePrice}`}>Live Price</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>22/01/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>2</td>
+            <td className={classes.td}>EUR</td>
+            <td className={classes.td}>56.000,00</td>
+            <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>25/04/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>2</td>
+            <td className={classes.td}>EUR</td>
+            <td className={classes.td}>56.000,00</td>
+            <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
+          </tr>
+          <tr className={classes.tr}>
+            <td className={classes.td}>25/04/2020 20:55</td>
+            <td className={classes.td}>Bitcoin</td>
+            <td className={classes.td}>2</td>
+            <td className={classes.td}>EUR</td>
+            <td className={classes.td}>56.000,00</td>
+            <td className={`${classes.td} ${classes.exchanged}`}>Exchanged</td>
+          </tr>
         </tbody>
       </table>
+      <Pagination
+        totalNumber={6}
+        onPageChange={(page) => console.log({ page })}
+      />
     </div>
   );
 };

@@ -2,8 +2,9 @@
   display: grid;
   margin-top: 5rem;
   justify-content: start;
+  align-items: stretch;
   font-size: 1.3rem;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 .table {
