@@ -1,83 +1,62 @@
-import { GraphQLResolveInfo } from "graphql";
-import Post from "./models/Post.model";
+import { GraphQLResolveInfo } from 'graphql';
+import Exchange from './models/Exchange.model';
 
-type CreatePostInputType = {
-  title: string;
-  description: string;
+enum PriceType {
+  Exchanged = 'Exchanged',
+  LivePrice = 'LivePrice',
+}
+
+type CreateInputType = {
+  currencyFrom: string;
+  amount1: number;
+  currencyTo: string;
+  amount2: number;
+  type: PriceType;
 };
 
-type CreatePostArgs = {
-  input: CreatePostInputType;
-};
-
-type UpdatePostInputType = {
-  title?: string;
-  description?: string;
-};
-
-type UpdatePostArgs = {
-  id: string;
-  input: UpdatePostInputType;
-};
-
-type DeletePostArgs = {
-  id: string;
+type CreateArgs = {
+  input: CreateInputType;
 };
 
 const resolvers = {
   Query: {
-    hello: () => {
-      return "Hellooooo";
+    getAllExchanges: async () => {
+      return await Exchange.find();
     },
+    filterExchanges: async (_: undefined, date: Date) => {
+      console.log({ date });
 
-    getAllPosts: async () => {
-      return await Post.find();
-    },
+      let utcc = Date.UTC(2022, 4, 21, 13, 30);
 
-    getPost: async (_: undefined, name: string) => {
-      return await Post.find();
+      let dell = new Date(Date.UTC(2021, 4, 21, 13, 30));
+
+      //todo
+      let result = await Exchange.find({
+        dateTime: { $lte: '2021-11-23' },
+      });
+
+      return result;
     },
   },
 
   Mutation: {
-    createPost: async (_: undefined, args: CreatePostArgs) => {
+    createExchange: async (_: undefined, args: CreateArgs) => {
       const {
-        input: { title, description },
+        input: { amount1, amount2, currencyFrom, currencyTo, type },
       } = args;
 
-      const post = new Post({
-        title,
-        description,
+      const exchange = new Exchange({
+        dateTime: new Date(),
+        amount1,
+        amount2,
+        currencyFrom,
+        currencyTo,
+        type,
       });
 
-      await post.save();
+      await exchange.save();
 
-      return post;
-    },
-
-    deletePost: async (_: undefined, args: DeletePostArgs) => {
-      const { id } = args;
-      await Post.findByIdAndDelete(id);
-      return id;
-    },
-
-    updatePost: async (_: undefined, { id, input }: UpdatePostArgs) => {
-      const { description, title } = input;
-
-      //const params = {};
-      // Object.entries(input)
-      //   .filter((f) => f[1])
-      //   .reduce((accum, [k, v]) => {
-      //     accum[k] = v;
-      //     return accum;
-      //   }, {});
-
-      const params = Object.fromEntries(
-        Object.entries(input).filter((f) => f[1])
-      );
-
-      await Post.findByIdAndUpdate(id, params);
-      return await Post.findById(id);
+      return exchange;
     },
   },
 };

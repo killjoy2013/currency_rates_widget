@@ -1,33 +1,38 @@
 import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
-  type Post {
+  scalar Date
+
+  enum PriceType {
+    Exchanged
+    LivePrice
+  }
+
+  type Exchange {
     id: ID
-    title: String
-    description: String
+    dateTime: Date
+    currencyFrom: String
+    amount1: Float
+    currencyTo: String
+    amount2: Float
+    type: PriceType
   }
 
   type Query {
-    hello: String
-
-    getAllPosts: [Post]
-    getPost(name: String!): Post
-  }
-
-  input CreatePostInput {
-    title: String!
-    description: String
-  }
-
-  input UpdatePostInput {
-    title: String
-    description: String
+    getAllExchanges: [Exchange]
+    filterExchanges(dateTime: Date!): [Exchange]
   }
 
   type Mutation {
-    createPost(input: CreatePostInput!): Post
-    deletePost(id: ID!): String
-    updatePost(id: ID!, input: UpdatePostInput!): Post
+    createExchange(input: CreateInput!): Exchange
+  }
+
+  input CreateInput {
+    currencyFrom: String!
+    amount1: Float!
+    currencyTo: String!
+    amount2: Float!
+    type: PriceType!
   }
 `;
 
