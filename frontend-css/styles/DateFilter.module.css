@@ -4,3 +4,12 @@
   align-items: flex-end;
   gap: var(--gap-between-form-elements);
 }
+
+.type {
+}
+
+@media (max-width: 1200px) {
+  .type {
+    display: none;
+  }
+}

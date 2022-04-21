@@ -245,10 +245,10 @@ const Row = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const Selected = ({ data }: { data: CurrencyItemType }) => (
-  <>
+  <div className={styles.currencyTo}>
     <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} alt="" />
     <div>{`${data.name}`}</div>
-  </>
+  </div>
 );
 
 const ExchangeForm = () => {

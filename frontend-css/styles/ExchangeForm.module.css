@@ -6,6 +6,11 @@
   font-size: 1.3rem;
 }
 
+.currencyTo {
+  display: flex;
+  /* background-color: var(--neutral-color); */
+}
+
 .main {
   background-color: white;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
+import clsx from "clsx";
 import genericStyles from "../../../styles/Generic.module.css";
 import styles from "../../../styles/DropDown.module.css";
 import { CurrencyItemType, EventType } from "../../components/ExchangeForm";
@@ -13,15 +14,17 @@ interface DropDownProps<T> {
   label: string;
   name: string;
   value: T;
+  className?: string;
   onChange: (e: T) => void;
 }
 
 function DropDown<T>(props: DropDownProps<T>) {
-  const { items, label, name, value, Row, Selected, onChange } = props;
+  const { items, label, name, value, className, Row, Selected, onChange } =
+    props;
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={`${genericStyles.formElement}`}>
+    <div className={clsx(genericStyles.formElement, className)}>
       <span className={genericStyles.formLabel}>{label}</span>
       <div
         id="input"

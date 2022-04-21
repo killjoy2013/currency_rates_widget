@@ -39,7 +39,8 @@ const DateFilter = () => {
         }
       />
       <DropDown<"All" | "Exchanged" | "Live Price">
-        name="currency-to"
+        className={styles.type}
+        name="type"
         Row={TypeRow}
         Selected={TypeSelect}
         value={formData.type}

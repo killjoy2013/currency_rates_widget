@@ -1,10 +1,12 @@
 import React from "react";
 import classes from "../../../styles/RateList.module.css";
+import DateFilter from "../DateFilter";
 
 const RateListMobile = () => {
   return (
     <div className={classes.mobile}>
       <div className={classes.titleSmall}>History</div>
+      <DateFilter />
       <div className={classes.box}>
         <div className={classes.upper}>
           <div className={classes.transaction}>

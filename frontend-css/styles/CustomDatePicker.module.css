@@ -1,5 +1,6 @@
 .datePicker {
   width: auto !important;
+  font-family: var(--font-family);
 }
 
 .datePicker input {
@@ -12,9 +13,9 @@
   width: 12rem;
 }
 
-.react-datepicker__tab-loop input {
+/* .react-datepicker__tab-loop input {
   border: solid 2px salmon !important;
-}
+} */
 
 .container {
   display: grid;
