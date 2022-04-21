@@ -1,10 +1,10 @@
-import express from 'express';
-import { ApolloServer, gql } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import typeDefs from './typeDefs';
-import resolvers from './resolvers';
+import express from "express";
+import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import typeDefs from "./typeDefs";
+import resolvers from "./resolvers";
 
 dotenv.config();
 
@@ -22,15 +22,15 @@ async function startServer() {
   });
 
   app.use((req, res) => {
-    res.send('Hello from express apollo server');
+    res.send("Hello from express apollo server");
   });
 
   await mongoose.connect(process.env.MONGODB_CONNECTION as string);
 
-  console.log('Mongoose connected...');
+  console.log("Mongoose connected...");
 
   app.listen(4000, () => {
-    console.log('listening on 4000');
+    console.log("listening on 4000");
   });
 }
 

@@ -26,9 +26,10 @@ const DateFilter = () => {
         name="fromDate"
         value={formData?.fromDate}
         label="From date"
-        onChange={({ value }) =>
-          setFormData((prev) => ({ ...prev, fromDate: value }))
-        }
+        onChange={({ value }) => {
+          setFormData((prev) => ({ ...prev, fromDate: value }));
+          console.log({ value });
+        }}
       />
       <CustomDatePicker
         name="toDate"
