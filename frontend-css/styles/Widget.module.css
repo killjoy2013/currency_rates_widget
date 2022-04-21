@@ -1,18 +1,29 @@
-.page {
-  position: relative;
+.main {
   background-color: white;
+}
+
+.container {
   display: grid;
-  padding-left: 30rem;
-  justify-content: start;
+  justify-content: center;
+}
+
+.baseShadow {
+  box-shadow: 0 1rem 1rem -1rem #333;
+  /* border-bottom: 0.5rem solid #ccc; */
 }
 
 .toolbar {
-  position: relative;
+  /* position: relative; */
   display: grid;
   min-height: 23rem;
   align-items: center;
   justify-content: start;
-  box-shadow: 0 1rem 1rem -1rem #333;
+  min-width: 120rem;
+}
+
+.row {
+  display: flex;
+  justify-content: start;
 }
 
 .title {
@@ -28,6 +39,8 @@
   .toolbar {
     justify-content: stretch;
     align-content: start;
+    min-width: 100%;
+    padding: 5rem 0;
     gap: var(--gap-between-form-elements);
   }
 }

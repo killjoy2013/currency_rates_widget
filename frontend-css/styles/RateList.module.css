@@ -1,16 +1,17 @@
 .desktop {
   display: grid;
   margin-top: 5rem;
-  justify-content: start;
+  justify-content: stretch;
   align-items: stretch;
   font-size: 1.3rem;
   gap: 2rem;
 }
 
 .table {
-  width: 800px;
+  /* width: 800px; */
   /* margin-top: 5rem; */
   border-collapse: collapse;
+  min-width: 120rem;
 }
 
 .td {

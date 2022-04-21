@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, FunctionComponent } from "react";
 import classes from "../../../styles/RateList.module.css";
 
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import DateFilter from "../DateFilter";
 import Pagination from "../Pagination";
+import { Exchange } from "@src/generated/graphql";
 
-const RateListDesktop = () => {
+interface RateListDesktopProps {
+  //list: Exchange[];
+}
+
+const RateListDesktop: FunctionComponent<RateListDesktopProps> = () => {
   const [sortAsc, setSortAsc] = useState<boolean>(true);
 
   return (
@@ -30,6 +35,18 @@ const RateListDesktop = () => {
           </tr>
         </thead>
         <tbody>
+          {/* {list.map((exchange) => (
+            <tr className={classes.tr}>
+              <td className={classes.td}>{exchange.dateTime}</td>
+              <td className={classes.td}>{exchange.currencyFrom}</td>
+              <td className={classes.td}>{exchange.amount1}</td>
+              <td className={classes.td}>{exchange.currencyTo}</td>
+              <td className={classes.td}>{exchange.amount2}</td>
+              <td className={`${classes.td} ${classes.livePrice}`}>
+                {exchange.type}
+              </td>
+            </tr>
+          ))} */}
           <tr className={classes.tr}>
             <td className={classes.td}>22/01/2020 20:55</td>
             <td className={classes.td}>Bitcoin</td>
