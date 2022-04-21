@@ -23,8 +23,11 @@ async function startServer() {
   });
 
   await mongoose.connect(
-    "mongodb+srv://taskuser:taskpassword@cluster0.hig3e.mongodb.net/task?retryWrites=true&w=majority"
+    "mongodb+srv://testuser:testpass@cluster0.ex1fq.mongodb.net/fooddb-3?retryWrites=true&w=majority"
   );
+  //   await mongoose.connect(
+  //     "mongodb+srv://taskuser:taskpassword@cluster0.hig3e.mongodb.net/task?retryWrites=true&w=majority"
+  //   );
 
   console.log("Mongoose connected...");
 
