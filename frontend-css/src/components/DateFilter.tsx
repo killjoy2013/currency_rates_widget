@@ -8,6 +8,7 @@ import {
   GetExchangesDocument,
   GetExchangesQuery,
   GetExchangesQueryVariables,
+  PriceType,
 } from "@src/generated/graphql";
 import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 import { useQuery } from "react-query";
@@ -17,14 +18,14 @@ import { useEffect } from "react";
 type FormData = {
   fromDate: Date;
   toDate: Date;
-  type: "All" | "Exchanged" | "Live Price";
+  type: PriceType;
 };
 
 const DateFilter = () => {
   const [formData, setFormData] = useState<FormData>({
     fromDate: new Date(),
     toDate: new Date(),
-    type: "All",
+    type: PriceType.All,
   });
 
   const { data, error, isError, isLoading, refetch, isFetching } = useQuery<
@@ -38,7 +39,9 @@ const DateFilter = () => {
         GetExchangesQuery,
         GetExchangesQueryVariables
       >(GetExchangesDocument, {
-        currencyFrom: "BTC",
+        startDate: formData.fromDate,
+        endDate: formData.toDate,
+        type: formData.type,
       });
     },
     {
@@ -98,14 +101,14 @@ const DateFilter = () => {
           setFormData((prev) => ({ ...prev, toDate: value }))
         }
       />
-      <DropDown<"All" | "Exchanged" | "Live Price">
+      <DropDown<PriceType>
         className={styles.type}
         name="type"
         Row={TypeRow}
         Selected={TypeSelect}
         value={formData.type}
         label="Type"
-        items={["All", "Exchanged", "Live Price"]}
+        items={[PriceType.All, PriceType.Exchanged, PriceType.LivePrice]}
         onChange={(type) => setFormData((prev) => ({ ...prev, type }))}
       />
       <Button

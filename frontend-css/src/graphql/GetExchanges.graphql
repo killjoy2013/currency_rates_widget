@@ -1,9 +1,5 @@
-query getExchanges($startDate: Date, $endDate: Date, $currencyFrom: String) {
-  getExchanges(
-    startDate: $startDate
-    endDate: $endDate
-    currencyFrom: $currencyFrom
-  ) {
+query getExchanges($startDate: Date, $endDate: Date, $type: PriceType) {
+  getExchanges(startDate: $startDate, endDate: $endDate, type: $type) {
     id
     dateTime
     currencyFrom

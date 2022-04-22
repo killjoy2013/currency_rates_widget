@@ -1,5 +1,13 @@
+import {
+  CreateExchangeMutation,
+  CreateExchangeMutationVariables,
+  PriceType,
+  useCreateExchangeMutation,
+} from "@src/generated/graphql";
+import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 import Image from "next/image";
 import { useReducer, useState } from "react";
+import { useQueryClient } from "react-query";
 import styles from "../../styles/ExchangeForm.module.css";
 import genericStyles from "../../styles/Generic.module.css";
 import Button from "../elements/Button";
@@ -252,8 +260,35 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const ExchangeForm = () => {
+  const queryClient = useQueryClient();
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
   const [showModal, setShowModal] = useState(false);
+
+  const { mutate: createExchange } = useCreateExchangeMutation<
+    CreateExchangeMutation,
+    Error
+  >(graphqlRequestClient, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("exchange-rates");
+      setTimeout(() => {
+        setShowModal(false);
+      });
+    },
+  });
+
+  const createHandler = () => {
+    const { amountFrom, amountTo, currencyFrom, currencyTo } = state;
+
+    createExchange({
+      input: {
+        amount1: amountFrom as number,
+        amount2: amountTo as number,
+        currencyFrom: currencyFrom.name,
+        currencyTo: currencyTo.abbr,
+        type: PriceType.Exchanged,
+      },
+    });
+  };
 
   return (
     <div className={genericStyles.form}>
@@ -315,7 +350,7 @@ const ExchangeForm = () => {
           date={new Date()}
           status="Approved"
           formState={state}
-          onClose={() => setShowModal(false)}
+          onClose={() => createHandler()}
         />
       </Modal>
     </div>

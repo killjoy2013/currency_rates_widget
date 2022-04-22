@@ -4,6 +4,7 @@ const typeDefs = gql`
   scalar Date
 
   enum PriceType {
+    All
     Exchanged
     LivePrice
   }
@@ -19,11 +20,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getExchanges(
-      startDate: Date
-      endDate: Date
-      currencyFrom: String
-    ): [Exchange]
+    getExchanges(startDate: Date, endDate: Date, type: PriceType): [Exchange]
     # filterExchanges(dateTime: Date!): [Exchange]
   }
 

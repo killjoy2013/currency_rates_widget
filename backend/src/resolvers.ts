@@ -2,6 +2,7 @@ import { GraphQLResolveInfo } from "graphql";
 import Exchange from "./models/Exchange.model";
 
 enum PriceType {
+  All = "All",
   Exchanged = "Exchanged",
   LivePrice = "LivePrice",
 }
@@ -21,21 +22,27 @@ type CreateArgs = {
 const resolvers = {
   Query: {
     getExchanges: async (_: undefined, args: any) => {
-      const { startDate, endDate, currencyFrom } = args;
+      const { startDate, endDate, type } = args;
 
       // console.log({ startDate, endDate, currencyFrom });
+      const params: any = {};
 
-      console.log("getExchanges");
-
-      let result = [];
-
-      if (currencyFrom) {
-        result = await Exchange.find({
-          currencyFrom,
-        });
-      } else {
-        result = await Exchange.find();
+      if (startDate != endDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
       }
+
+      if (type == PriceType.LivePrice || type == PriceType.Exchanged) {
+        params.type = type;
+      }
+
+      console.log({ params });
+      console.count("getExchanges - ");
+      console.log("****************************");
+
+      let result = await Exchange.find({ ...params })
+        .sort({ dateTime: -1 })
+        .limit(10);
 
       // console.log({ result });
 
@@ -68,6 +75,8 @@ const resolvers = {
         input: { amount1, amount2, currencyFrom, currencyTo, type },
       } = args;
 
+      console.log({ amount1, amount2, currencyFrom, currencyTo, type });
+
       const exchange = new Exchange({
         dateTime: new Date(),
         amount1,
@@ -80,6 +89,8 @@ const resolvers = {
       await exchange.save();
 
       return exchange;
+
+      console.log(exchange);
     },
   },
 };

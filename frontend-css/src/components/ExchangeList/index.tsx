@@ -26,11 +26,11 @@ const RateList = () => {
       return graphqlRequestClient.request(GetExchangesDocument);
     },
     {
-      enabled: false,
-      cacheTime: 0,
+      enabled: true,
     }
   );
 
+  //codegen ???
   // const { data, error, isLoading, refetch } = useGetAllExchangesQuery<
   //   GetAllExchangesQuery,
   //   Error
@@ -45,6 +45,10 @@ const RateList = () => {
   useEffect(() => {
     data && console.log({ data });
   }, [!!data]);
+
+  useEffect(() => {
+    console.count("Exchange list rendered - ");
+  });
 
   return (
     <>

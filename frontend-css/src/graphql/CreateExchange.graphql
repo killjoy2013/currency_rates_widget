@@ -1,0 +1,11 @@
+mutation createExchange($input: CreateInput!) {
+  createExchange(input: $input) {
+    id
+    dateTime
+    currencyFrom
+    amount1
+    currencyTo
+    amount2
+    type
+  }
+}

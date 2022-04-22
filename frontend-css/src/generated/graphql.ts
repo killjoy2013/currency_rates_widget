@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -50,6 +50,7 @@ export type MutationCreateExchangeArgs = {
 };
 
 export enum PriceType {
+  All = 'All',
   Exchanged = 'Exchanged',
   LivePrice = 'LivePrice'
 }
@@ -61,28 +62,57 @@ export type Query = {
 
 
 export type QueryGetExchangesArgs = {
-  currencyFrom?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['Date']>;
   startDate?: InputMaybe<Scalars['Date']>;
+  type?: InputMaybe<PriceType>;
 };
+
+export type CreateExchangeMutationVariables = Exact<{
+  input: CreateInput;
+}>;
+
+
+export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange?: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null };
 
 export type GetExchangesQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars['Date']>;
   endDate?: InputMaybe<Scalars['Date']>;
-  currencyFrom?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<PriceType>;
 }>;
 
 
 export type GetExchangesQuery = { __typename?: 'Query', getExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
 
 
+export const CreateExchangeDocument = `
+    mutation createExchange($input: CreateInput!) {
+  createExchange(input: $input) {
+    id
+    dateTime
+    currencyFrom
+    amount1
+    currencyTo
+    amount2
+    type
+  }
+}
+    `;
+export const useCreateExchangeMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<CreateExchangeMutation, TError, CreateExchangeMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<CreateExchangeMutation, TError, CreateExchangeMutationVariables, TContext>(
+      ['createExchange'],
+      (variables?: CreateExchangeMutationVariables) => fetcher<CreateExchangeMutation, CreateExchangeMutationVariables>(client, CreateExchangeDocument, variables, headers)(),
+      options
+    );
 export const GetExchangesDocument = `
-    query getExchanges($startDate: Date, $endDate: Date, $currencyFrom: String) {
-  getExchanges(
-    startDate: $startDate
-    endDate: $endDate
-    currencyFrom: $currencyFrom
-  ) {
+    query getExchanges($startDate: Date, $endDate: Date, $type: PriceType) {
+  getExchanges(startDate: $startDate, endDate: $endDate, type: $type) {
     id
     dateTime
     currencyFrom
