@@ -50,6 +50,11 @@
   background-color: #eeeeee;
 }
 
+.titleSmall {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 .exchanged {
   font-weight: bold;
   color: var(--exchange-color);
@@ -60,11 +65,7 @@
   color: var(--live-price-color);
 }
 
-.titleSmall {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
+/* 
 .mobile {
   display: none;
   align-content: start;
@@ -110,13 +111,13 @@
 
 .live {
   background-color: var(--live-price-color);
-}
+} */
 
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .mobile {
     display: grid;
   }
-}
+} */
 
 @media (max-width: 1200px) {
   .desktop {

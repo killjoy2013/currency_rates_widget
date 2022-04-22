@@ -3,6 +3,11 @@ import styles from "../../styles/DateFilter.module.css";
 import { useState } from "react";
 import DropDown from "../elements/DropDown";
 import Button from "../elements/Button";
+import {
+  FilterExchangesQuery,
+  useFilterExchangesQuery,
+} from "@src/generated/graphql";
+import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 
 type FormData = {
   fromDate: Date;
@@ -15,6 +20,32 @@ const DateFilter = () => {
     fromDate: new Date(),
     toDate: new Date(),
     type: "All",
+  });
+
+  const { data, error, isError, isLoading, refetch, isFetching } =
+    useFilterExchangesQuery<FilterExchangesQuery, Error>(
+      graphqlRequestClient,
+      {
+        dateTime: formData.fromDate,
+      },
+      {
+        enabled: false,
+        onError: () => {
+          console.log("refetch error");
+        },
+        onSuccess: () => {
+          console.log("refetch success");
+        },
+      }
+    );
+
+  console.log({
+    data,
+    fromDate: formData.fromDate,
+    isLoading,
+    isFetching,
+    isError,
+    error,
   });
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
@@ -49,7 +80,13 @@ const DateFilter = () => {
         items={["All", "Exchanged", "Live Price"]}
         onChange={(type) => setFormData((prev) => ({ ...prev, type }))}
       />
-      <Button label="Filter" variant="outlined" onClick={() => {}} />
+      <Button
+        label="Filter"
+        variant="outlined"
+        onClick={() => {
+          () => refetch();
+        }}
+      />
     </div>
   );
 };

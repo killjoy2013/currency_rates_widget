@@ -1,0 +1,11 @@
+query filterExchanges($dateTime: Date!) {
+  filterExchanges(dateTime: $dateTime) {
+    id
+    dateTime
+    currencyFrom
+    amount1
+    currencyTo
+    amount2
+    type
+  }
+}

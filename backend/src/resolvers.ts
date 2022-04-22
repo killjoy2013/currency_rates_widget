@@ -1,9 +1,9 @@
-import { GraphQLResolveInfo } from 'graphql';
-import Exchange from './models/Exchange.model';
+import { GraphQLResolveInfo } from "graphql";
+import Exchange from "./models/Exchange.model";
 
 enum PriceType {
-  Exchanged = 'Exchanged',
-  LivePrice = 'LivePrice',
+  Exchanged = "Exchanged",
+  LivePrice = "LivePrice",
 }
 
 type CreateInputType = {
@@ -21,21 +21,26 @@ type CreateArgs = {
 const resolvers = {
   Query: {
     getAllExchanges: async () => {
+      console.log("getAllExchanges called");
+
       return await Exchange.find();
     },
     filterExchanges: async (_: undefined, date: Date) => {
-      console.log({ date });
+      let dateParam = new Date(date);
 
-      let utcc = Date.UTC(2022, 4, 21, 13, 30);
+      // console.log({ date, dateParam });
 
-      let dell = new Date(Date.UTC(2021, 4, 21, 13, 30));
+      // let utcc = Date.UTC(2022, 4, 21, 13, 30);
+      // let dell = new Date(Date.UTC(2021, 4, 21, 13, 30));
 
       //todo
-      let result = await Exchange.find({
-        dateTime: { $lte: '2021-11-23' },
-      });
+      // let result = await Exchange.find({
+      //   dateTime: { $lte: date },
+      // });
+      //return result;
 
-      return result;
+      //temmmmp
+      return await Exchange.find();
     },
   },
 

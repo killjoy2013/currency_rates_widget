@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { ApolloServer, gql } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import mongoose from "mongoose";
@@ -10,6 +11,15 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
+  app.use(
+    cors({
+      origin: "*",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+    })
+  );
+
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -24,6 +34,13 @@ async function startServer() {
   app.use((req, res) => {
     res.send("Hello from express apollo server");
   });
+
+  //  app.enableCors({
+  //    origin: "*",
+  //    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  //    preflightContinue: false,
+  //    optionsSuccessStatus: 204,
+  //  });
 
   await mongoose.connect(process.env.MONGODB_CONNECTION as string);
 

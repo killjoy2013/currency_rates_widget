@@ -65,12 +65,46 @@ export type QueryFilterExchangesArgs = {
   dateTime: Scalars['Date'];
 };
 
+export type FilterExchangesQueryVariables = Exact<{
+  dateTime: Scalars['Date'];
+}>;
+
+
+export type FilterExchangesQuery = { __typename?: 'Query', filterExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
+
 export type GetAllExchangesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllExchangesQuery = { __typename?: 'Query', getAllExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
 
 
+export const FilterExchangesDocument = `
+    query filterExchanges($dateTime: Date!) {
+  filterExchanges(dateTime: $dateTime) {
+    id
+    dateTime
+    currencyFrom
+    amount1
+    currencyTo
+    amount2
+    type
+  }
+}
+    `;
+export const useFilterExchangesQuery = <
+      TData = FilterExchangesQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: FilterExchangesQueryVariables,
+      options?: UseQueryOptions<FilterExchangesQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<FilterExchangesQuery, TError, TData>(
+      ['filterExchanges', variables],
+      fetcher<FilterExchangesQuery, FilterExchangesQueryVariables>(client, FilterExchangesDocument, variables, headers),
+      options
+    );
 export const GetAllExchangesDocument = `
     query getAllExchanges {
   getAllExchanges {
