@@ -6,9 +6,9 @@ import RateListDesktop from "./ExchangeListDesktop";
 import RateListMobile from "./RateListMobile";
 import {
   Exchange,
-  GetAllExchangesDocument,
-  GetAllExchangesQuery,
-  useGetAllExchangesQuery,
+  GetExchangesDocument,
+  GetExchangesQuery,
+  useGetExchangesQuery,
 } from "@src/generated/graphql";
 import graphqlRequestClient from "src/lib/graphqlRequestClient";
 import { useEffect } from "react";
@@ -19,10 +19,17 @@ const RateList = () => {
   const { data, error, isLoading, refetch } = useQuery<
     GraphQLResponse,
     Error,
-    GraphQLResponse<GetAllExchangesQuery>
-  >("exchange-rates", async () => {
-    return graphqlRequestClient.request(GetAllExchangesDocument);
-  });
+    GraphQLResponse<GetExchangesQuery>
+  >(
+    "exchange-rates",
+    async () => {
+      return graphqlRequestClient.request(GetExchangesDocument);
+    },
+    {
+      enabled: false,
+      cacheTime: 0,
+    }
+  );
 
   // const { data, error, isLoading, refetch } = useGetAllExchangesQuery<
   //   GetAllExchangesQuery,
@@ -41,10 +48,10 @@ const RateList = () => {
 
   return (
     <>
-      {data?.getAllExchanges && (
+      {data?.getExchanges && (
         <>
-          <RateListDesktop list={data?.getAllExchanges as Exchange[]} />
-          <RateListMobile list={data?.getAllExchanges as Exchange[]} />
+          <RateListDesktop list={data?.getExchanges as Exchange[]} />
+          <RateListMobile list={data?.getExchanges as Exchange[]} />
         </>
       )}
       {error && <>Error :-(</>}

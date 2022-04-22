@@ -56,31 +56,33 @@ export enum PriceType {
 
 export type Query = {
   __typename?: 'Query';
-  filterExchanges?: Maybe<Array<Maybe<Exchange>>>;
-  getAllExchanges?: Maybe<Array<Maybe<Exchange>>>;
+  getExchanges?: Maybe<Array<Maybe<Exchange>>>;
 };
 
 
-export type QueryFilterExchangesArgs = {
-  dateTime: Scalars['Date'];
+export type QueryGetExchangesArgs = {
+  currencyFrom?: InputMaybe<Scalars['String']>;
+  endDate?: InputMaybe<Scalars['Date']>;
+  startDate?: InputMaybe<Scalars['Date']>;
 };
 
-export type FilterExchangesQueryVariables = Exact<{
-  dateTime: Scalars['Date'];
+export type GetExchangesQueryVariables = Exact<{
+  startDate?: InputMaybe<Scalars['Date']>;
+  endDate?: InputMaybe<Scalars['Date']>;
+  currencyFrom?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type FilterExchangesQuery = { __typename?: 'Query', filterExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
-
-export type GetAllExchangesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetExchangesQuery = { __typename?: 'Query', getExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
 
 
-export type GetAllExchangesQuery = { __typename?: 'Query', getAllExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
-
-
-export const FilterExchangesDocument = `
-    query filterExchanges($dateTime: Date!) {
-  filterExchanges(dateTime: $dateTime) {
+export const GetExchangesDocument = `
+    query getExchanges($startDate: Date, $endDate: Date, $currencyFrom: String) {
+  getExchanges(
+    startDate: $startDate
+    endDate: $endDate
+    currencyFrom: $currencyFrom
+  ) {
     id
     dateTime
     currencyFrom
@@ -91,44 +93,17 @@ export const FilterExchangesDocument = `
   }
 }
     `;
-export const useFilterExchangesQuery = <
-      TData = FilterExchangesQuery,
+export const useGetExchangesQuery = <
+      TData = GetExchangesQuery,
       TError = unknown
     >(
       client: GraphQLClient,
-      variables: FilterExchangesQueryVariables,
-      options?: UseQueryOptions<FilterExchangesQuery, TError, TData>,
+      variables?: GetExchangesQueryVariables,
+      options?: UseQueryOptions<GetExchangesQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<FilterExchangesQuery, TError, TData>(
-      ['filterExchanges', variables],
-      fetcher<FilterExchangesQuery, FilterExchangesQueryVariables>(client, FilterExchangesDocument, variables, headers),
-      options
-    );
-export const GetAllExchangesDocument = `
-    query getAllExchanges {
-  getAllExchanges {
-    id
-    dateTime
-    currencyFrom
-    amount1
-    currencyTo
-    amount2
-    type
-  }
-}
-    `;
-export const useGetAllExchangesQuery = <
-      TData = GetAllExchangesQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables?: GetAllExchangesQueryVariables,
-      options?: UseQueryOptions<GetAllExchangesQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetAllExchangesQuery, TError, TData>(
-      variables === undefined ? ['getAllExchanges'] : ['getAllExchanges', variables],
-      fetcher<GetAllExchangesQuery, GetAllExchangesQueryVariables>(client, GetAllExchangesDocument, variables, headers),
+    useQuery<GetExchangesQuery, TError, TData>(
+      variables === undefined ? ['getExchanges'] : ['getExchanges', variables],
+      fetcher<GetExchangesQuery, GetExchangesQueryVariables>(client, GetExchangesDocument, variables, headers),
       options
     );

@@ -19,8 +19,12 @@ const typeDefs = gql`
   }
 
   type Query {
-    getAllExchanges: [Exchange]
-    filterExchanges(dateTime: Date!): [Exchange]
+    getExchanges(
+      startDate: Date
+      endDate: Date
+      currencyFrom: String
+    ): [Exchange]
+    # filterExchanges(dateTime: Date!): [Exchange]
   }
 
   type Mutation {

@@ -20,28 +20,46 @@ type CreateArgs = {
 
 const resolvers = {
   Query: {
-    getAllExchanges: async () => {
-      console.log("getAllExchanges called");
+    getExchanges: async (_: undefined, args: any) => {
+      const { startDate, endDate, currencyFrom } = args;
 
-      return await Exchange.find();
+      // console.log({ startDate, endDate, currencyFrom });
+
+      console.log("getExchanges");
+
+      let result = [];
+
+      if (currencyFrom) {
+        result = await Exchange.find({
+          currencyFrom,
+        });
+      } else {
+        result = await Exchange.find();
+      }
+
+      // console.log({ result });
+
+      return result;
     },
-    filterExchanges: async (_: undefined, date: Date) => {
-      let dateParam = new Date(date);
 
-      // console.log({ date, dateParam });
+    // filterExchanges: async (_: undefined, date: Date) => {
+    //   let dateParam = new Date(date);
 
-      // let utcc = Date.UTC(2022, 4, 21, 13, 30);
-      // let dell = new Date(Date.UTC(2021, 4, 21, 13, 30));
+    //   console.log("filterExchanges", { date, dateParam });
 
-      //todo
-      // let result = await Exchange.find({
-      //   dateTime: { $lte: date },
-      // });
-      //return result;
+    //   //todo
+    //   let dell = new Date(2022, 3, 22);
+    //   let result = await Exchange.find({
+    //     dateTime: { $lte: dell },
+    //   });
+    //   // let result = await Exchange.find({
+    //   //   currencyTo: "USD",
+    //   // });
 
-      //temmmmp
-      return await Exchange.find();
-    },
+    //   console.log({ dell, result });
+
+    //   return result;
+    // },
   },
 
   Mutation: {

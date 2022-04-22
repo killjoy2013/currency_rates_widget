@@ -4,10 +4,15 @@ import { useState } from "react";
 import DropDown from "../elements/DropDown";
 import Button from "../elements/Button";
 import {
-  FilterExchangesQuery,
-  useFilterExchangesQuery,
+  Exchange,
+  GetExchangesDocument,
+  GetExchangesQuery,
+  GetExchangesQueryVariables,
 } from "@src/generated/graphql";
 import graphqlRequestClient from "@src/lib/graphqlRequestClient";
+import { useQuery } from "react-query";
+import { GraphQLResponse } from "graphql-request/dist/types";
+import { useEffect } from "react";
 
 type FormData = {
   fromDate: Date;
@@ -22,31 +27,54 @@ const DateFilter = () => {
     type: "All",
   });
 
-  const { data, error, isError, isLoading, refetch, isFetching } =
-    useFilterExchangesQuery<FilterExchangesQuery, Error>(
-      graphqlRequestClient,
-      {
-        dateTime: formData.fromDate,
-      },
-      {
-        enabled: false,
-        onError: () => {
-          console.log("refetch error");
-        },
-        onSuccess: () => {
-          console.log("refetch success");
-        },
-      }
-    );
+  const { data, error, isError, isLoading, refetch, isFetching } = useQuery<
+    GetExchangesQuery,
+    Error,
+    Exchange[]
+  >(
+    "exchange-rates",
+    async () => {
+      return graphqlRequestClient.request<
+        GetExchangesQuery,
+        GetExchangesQueryVariables
+      >(GetExchangesDocument, {
+        currencyFrom: "BTC",
+      });
+    },
+    {
+      enabled: false,
+      cacheTime: 0,
+    }
+  );
 
-  console.log({
-    data,
-    fromDate: formData.fromDate,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-  });
+  // const { data, error, isError, isLoading, refetch, isFetching } =
+  //   useFilterExchangesQuery<FilterExchangesQuery, Error>(
+  //     graphqlRequestClient,
+  //     {
+  //       dateTime: formData.fromDate,
+  //     },
+  //     {
+  //       enabled: false,
+  //       onError: () => {
+  //         console.log("refetch error");
+  //       },
+  //       onSuccess: () => {
+  //         console.log("refetch success");
+  //       },
+  //     }
+  //   );
+
+  useEffect(() => {
+    data &&
+      console.log({
+        data,
+        fromDate: formData.fromDate,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+      });
+  }, [!!data]);
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
   const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
@@ -83,8 +111,9 @@ const DateFilter = () => {
       <Button
         label="Filter"
         variant="outlined"
-        onClick={() => {
-          () => refetch();
+        onClick={async () => {
+          let dell = await refetch();
+          console.log("refetch", dell);
         }}
       />
     </div>

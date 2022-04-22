@@ -9,9 +9,9 @@ import DateFilter from "../components/DateFilter";
 import ExchangeForm from "../components/ExchangeForm";
 import RateList from "../components/ExchangeList";
 import {
-  GetAllExchangesDocument,
-  GetAllExchangesQuery,
-  GetAllExchangesQueryVariables,
+  GetExchangesDocument,
+  GetExchangesQuery,
+  GetExchangesQueryVariables,
 } from "@src/generated/graphql";
 import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 
@@ -41,12 +41,18 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<{
 
   await queryClient.prefetchQuery("exchange-rates", async () => {
     return graphqlRequestClient.request<
-      GetAllExchangesQuery,
-      GetAllExchangesQueryVariables
-    >(GetAllExchangesDocument, {});
+      GetExchangesQuery,
+      GetExchangesQueryVariables
+    >(GetExchangesDocument, {});
   });
 
-  console.log("query prefetched", queryClient);
+  // await queryClient.prefetchQuery("exchange-rates", async () => {
+  //   return graphqlRequestClient.request<GetExchangesQuery>(
+  //     GetExchangesDocument
+  //   );
+  // });
+
+  // console.log("query prefetched", queryClient);
 
   return { props: { dehydratedState: dehydrate(queryClient) } };
 };

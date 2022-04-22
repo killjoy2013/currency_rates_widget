@@ -1,0 +1,15 @@
+query getExchanges($startDate: Date, $endDate: Date, $currencyFrom: String) {
+  getExchanges(
+    startDate: $startDate
+    endDate: $endDate
+    currencyFrom: $currencyFrom
+  ) {
+    id
+    dateTime
+    currencyFrom
+    amount1
+    currencyTo
+    amount2
+    type
+  }
+}
