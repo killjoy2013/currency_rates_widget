@@ -1,27 +1,9 @@
 import { GraphQLResolveInfo } from "graphql";
 import Exchange from "./models/Exchange.model";
-
-enum PriceType {
-  All = "All",
-  Exchanged = "Exchanged",
-  LivePrice = "LivePrice",
-}
-
-enum Status {
-  Approved = "Approved",
-  Rejected = "Rejected",
-}
-
-type CreateInputType = {
-  currencyFrom: string;
-  amount1: number;
-  currencyTo: string;
-  amount2: number;
-  type: PriceType;
-};
+import { CreateExchangeType, PriceType, Status, Transaction } from "./types";
 
 type CreateArgs = {
-  input: CreateInputType;
+  input: CreateExchangeType;
 };
 
 type QueryInputType = {
@@ -43,7 +25,6 @@ const resolvers = {
         } = args;
 
         const params: any = {};
-
         if (fromDate != toDate) {
           params.dateTime = { $gte: fromDate, $lte: toDate };
         }
@@ -52,27 +33,20 @@ const resolvers = {
           params.type = type;
         }
 
-        // console.log({ params });
-        // console.count("getExchanges - ");
-        // console.log("****************************");
-
-        let result = await Exchange.find({ ...params })
+        return await Exchange.find({ ...params })
           .sort({ dateTime: -1 })
           .limit(5);
-
-        console.log({ result });
-
-        return result;
       } else {
-        let result = await Exchange.find().sort({ dateTime: -1 }).limit(5);
-
-        return result;
+        return await Exchange.find().sort({ dateTime: -1 }).limit(5);
       }
     },
   },
 
   Mutation: {
-    createExchange: async (_: undefined, args: CreateArgs) => {
+    createExchange: async (
+      _: undefined,
+      args: CreateArgs
+    ): Promise<Transaction> => {
       const {
         input: { amount1, amount2, currencyFrom, currencyTo, type },
       } = args;

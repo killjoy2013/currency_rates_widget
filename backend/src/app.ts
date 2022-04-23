@@ -6,13 +6,17 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
-import typeDefs from "./typeDefs";
+import typeDefs from "./type_defs";
 import resolvers from "./resolvers";
+import { SocketRepository } from "./socket_repository";
+import { Faker } from "./faker";
 
 dotenv.config();
 
 async function startServer() {
   const app = express();
+
+  console.log(process.env.TO_CURRENCIES);
 
   app.use(
     cors({
@@ -45,18 +49,22 @@ async function startServer() {
   let server = app.listen(4000, () => {
     console.log("listening on 4000");
   });
+
   const io = new Server(server, {
     cors: {
       origin: "http://localhost:3000",
     },
   });
 
-  io.on("connection", (socket) => {
-    console.log(socket.id);
-    io.on("disconnect", (socket) => {
-      console.log(`${socket.id} disconnected`);
-    });
-  });
+  SocketRepository.setIo(io);
+  await Faker.startFake();
+
+  // io.on("connection", (socket) => {
+  //   console.log(socket.id);
+  //   io.on("disconnect", (socket) => {
+  //     console.log(`${socket.id} disconnected`);
+  //   });
+  // });
 }
 
 startServer();

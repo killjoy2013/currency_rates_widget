@@ -25,6 +25,10 @@ const Home = () => {
       socketRef.current.on("disconnect", () => {
         console.log("disconnected");
       });
+
+      socketRef.current.on("FAKE_EXCHANGE_CREATED", (data) => {
+        console.log(data);
+      });
     }
   }, [socketRef.current]);
 
