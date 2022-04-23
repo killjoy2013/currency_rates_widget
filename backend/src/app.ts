@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
+import http from "http";
 import { ApolloServer, gql } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 
@@ -11,6 +13,7 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
+
   app.use(
     cors({
       origin: "*",
@@ -35,19 +38,24 @@ async function startServer() {
     res.send("Hello from express apollo server");
   });
 
-  //  app.enableCors({
-  //    origin: "*",
-  //    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  //    preflightContinue: false,
-  //    optionsSuccessStatus: 204,
-  //  });
-
   await mongoose.connect(process.env.MONGODB_CONNECTION as string);
 
   console.log("Mongoose connected...");
 
-  app.listen(4000, () => {
+  let server = app.listen(4000, () => {
     console.log("listening on 4000");
+  });
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:3000",
+    },
+  });
+
+  io.on("connection", (socket) => {
+    console.log(socket.id);
+    io.on("disconnect", (socket) => {
+      console.log(`${socket.id} disconnected`);
+    });
   });
 }
 
