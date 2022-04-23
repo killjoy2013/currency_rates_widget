@@ -1,31 +1,19 @@
-import "../../styles/globals.css";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "@src/lib/apolloClient";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { FunctionComponent, useState } from "react";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { Hydrate } from "react-query/hydration";
+import { FunctionComponent } from "react";
+import "../../styles/globals.css";
 
 const MyApp: FunctionComponent<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 20 * 1000,
-          },
-        },
-      })
-  );
+  const apolloClient = useApollo(pageProps.initialApolloState);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <Component {...pageProps} />
-      </Hydrate>
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <Component {...pageProps} />
+    </ApolloProvider>
   );
 };
 

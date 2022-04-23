@@ -4,7 +4,7 @@ import classes from "@styles/ExchangeListMobile.module.css";
 import DateFilter from "../DateFilter";
 
 interface ExchangeListMobileProps {
-  list: Exchange[];
+  list: Array<Exchange | null>;
 }
 
 const ExchangeListMobile: FunctionComponent<ExchangeListMobileProps> = ({
@@ -20,13 +20,13 @@ const ExchangeListMobile: FunctionComponent<ExchangeListMobileProps> = ({
           <div key={i} className={classes.box}>
             <div className={classes.upper}>
               <div className={classes.transaction}>
-                <span>{`${exchange.currencyFrom} -> ${exchange.currencyTo}`}</span>
+                <span>{`${exchange?.currencyFrom} -> ${exchange?.currencyTo}`}</span>
               </div>
               <div className={`${classes.indicator} ${classes.exchange}`} />
             </div>
             <div className={classes.lower}>
               <div className={classes.amount}>
-                <span>{`Amount ${exchange.currencyFrom} ${exchange.amount1}`}</span>
+                <span>{`Amount ${exchange?.currencyFrom} ${exchange?.amount1}`}</span>
               </div>
             </div>
           </div>

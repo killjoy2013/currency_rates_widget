@@ -7,7 +7,7 @@ import { Exchange } from "@src/generated/graphql";
 import moment from "moment";
 
 interface ExchangeListDesktopProps {
-  list: Exchange[];
+  list: Array<Exchange | null>;
 }
 
 const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
@@ -40,14 +40,14 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
           {list.map((exchange, i) => (
             <tr key={i} className={styles.tr}>
               <td className={styles.td}>
-                {moment(exchange.dateTime).format("DD/mm/yyyy HH:mm")}
+                {moment(exchange?.dateTime).format("DD/mm/yyyy HH:mm")}
               </td>
-              <td className={styles.td}>{exchange.currencyFrom}</td>
-              <td className={styles.td}>{exchange.amount1}</td>
-              <td className={styles.td}>{exchange.currencyTo}</td>
-              <td className={styles.td}>{exchange.amount2}</td>
+              <td className={styles.td}>{exchange?.currencyFrom}</td>
+              <td className={styles.td}>{exchange?.amount1}</td>
+              <td className={styles.td}>{exchange?.currencyTo}</td>
+              <td className={styles.td}>{exchange?.amount2}</td>
               <td className={`${styles.td} ${styles.livePrice}`}>
-                {exchange.type}
+                {exchange?.type}
               </td>
             </tr>
           ))}

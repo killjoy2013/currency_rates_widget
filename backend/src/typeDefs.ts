@@ -20,7 +20,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getExchanges(startDate: Date, endDate: Date, type: PriceType): [Exchange]
+    getExchanges(input: QueryInput): [Exchange]
     # filterExchanges(dateTime: Date!): [Exchange]
   }
 
@@ -34,6 +34,12 @@ const typeDefs = gql`
     currencyTo: String!
     amount2: Float!
     type: PriceType!
+  }
+
+  input QueryInput {
+    fromDate: Date
+    toDate: Date
+    type: PriceType
   }
 `;
 
