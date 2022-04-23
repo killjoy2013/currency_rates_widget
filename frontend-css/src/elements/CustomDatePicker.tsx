@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { AiOutlineCalendar } from "react-icons/ai";
-import DatePicker from "react-datepicker";
-import styles from "../../styles/CustomDatePicker.module.css";
-import genericStyles from "../../styles/Generic.module.css";
+import styles from "@styles/CustomDatePicker.module.css";
+import genericStyles from "@styles/Generic.module.css";
 import "font-awesome/css/font-awesome.min.css";
+import React from "react";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { AiOutlineCalendar } from "react-icons/ai";
 
 type CustomDatePickerProps = {
   name: string;

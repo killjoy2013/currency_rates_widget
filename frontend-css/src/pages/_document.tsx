@@ -49,16 +49,3 @@ MyDocument.getInitialProps = async (ctx) => {
     ...initialProps,
   };
 };
-
-// export default function Document() {
-//   return (
-//     <Html>
-//       <Head />
-//       <body>
-//         <Main />
-//         <NextScript />
-//         <div id="modal-root"></div>
-//       </body>
-//     </Html>
-//   );
-// }

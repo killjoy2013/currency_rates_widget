@@ -1,7 +1,5 @@
 import { useApolloClient } from "@apollo/client";
 import {
-  CreateExchangeMutation,
-  CreateExchangeMutationVariables,
   Exchange,
   GetExchangesQuery,
   GetExchangesQueryVariables,
@@ -11,15 +9,14 @@ import {
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
 import { Queries } from "@src/graphql/definitions";
-import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 import Image from "next/image";
-import { useEffect, useReducer, useState } from "react";
-import styles from "../../styles/ExchangeForm.module.css";
-import genericStyles from "../../styles/Generic.module.css";
-import Button from "../elements/Button";
-import DropDown from "../elements/DropDown";
-import TextInput from "../elements/TextInput";
-import ExchangeModalContent from "./ExchangeModalContent";
+import { useReducer, useState } from "react";
+import styles from "@styles/ExchangeForm.module.css";
+import genericStyles from "@styles/Generic.module.css";
+import Button from "@src/elements/Button";
+import DropDown from "@src/elements/DropDown";
+import TextInput from "@src/elements/TextInput";
+import ExchangeModalContent from "./TransactionModalContent";
 import Modal from "./Modal";
 
 export type EventType = {

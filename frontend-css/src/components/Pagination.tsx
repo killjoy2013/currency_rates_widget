@@ -1,6 +1,6 @@
 import React from "react";
 import { BiRightArrowAlt, BiLeftArrowAlt } from "react-icons/bi";
-import styles from "../../styles/Pagination.module.css";
+import styles from "@styles/Pagination.module.css";
 import { useState, useCallback } from "react";
 
 type PageItemProp = {

@@ -1,21 +1,11 @@
-import React, { Suspense } from "react";
-import Head from "next/head";
+import { Queries } from "@src/graphql/definitions";
+import { initializeApollo } from "@src/lib/apolloClient";
 import clsx from "clsx";
 import { GetServerSideProps } from "next";
-import { UseQueryResult, useQuery, QueryClient } from "react-query";
-import { dehydrate, DehydratedState } from "react-query/hydration";
-import styles from "../../styles/Widget.module.css";
-import DateFilter from "../components/DateFilter";
-import ExchangeForm from "../components/ExchangeForm";
-import ExchangeList from "../components/ExchangeList";
-import {
-  GetExchangesDocument,
-  GetExchangesQuery,
-  GetExchangesQueryVariables,
-} from "@src/generated/graphql";
-import graphqlRequestClient from "@src/lib/graphqlRequestClient";
-import { initializeApollo } from "@src/lib/apolloClient";
-import { Queries } from "@src/graphql/definitions";
+import React, { Suspense } from "react";
+import styles from "@styles/Widget.module.css";
+import ExchangeForm from "@src/components/ExchangeForm";
+import ExchangeList from "@src/components/ExchangeList";
 
 const Home = () => {
   return (

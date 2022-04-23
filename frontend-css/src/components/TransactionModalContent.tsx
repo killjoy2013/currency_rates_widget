@@ -11,7 +11,7 @@ interface ExchangeModalContentProps {
   onClose: () => void;
 }
 
-const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
+const TransactionModalContent: FunctionComponent<ExchangeModalContentProps> = ({
   transaction,
   onClose,
 }) => {
@@ -20,16 +20,6 @@ const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
 
   const { amount1, amount2, currencyFrom, currencyTo, dateTime, type } =
     exchange as Exchange;
-
-  console.log({
-    status,
-    amount1,
-    amount2,
-    currencyFrom,
-    currencyTo,
-    dateTime,
-    type,
-  });
 
   const TotalAmountDisplay = () => {
     return (
@@ -71,4 +61,4 @@ const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
   );
 };
 
-export default ExchangeModalContent;
+export default TransactionModalContent;

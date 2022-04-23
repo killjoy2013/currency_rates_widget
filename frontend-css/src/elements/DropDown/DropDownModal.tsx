@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import styles from "../../../styles/DropDown.module.css";
+import styles from "@styles/DropDown.module.css";
 
 export interface RowProps<T> {
   data: T;

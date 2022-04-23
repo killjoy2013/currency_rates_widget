@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import clsx from "clsx";
-import genericStyles from "../../../styles/Generic.module.css";
-import styles from "../../../styles/DropDown.module.css";
-import { CurrencyItemType, EventType } from "../../components/ExchangeForm";
+import React, { useState } from "react";
+import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
+import styles from "@styles/DropDown.module.css";
+import genericStyles from "@styles/Generic.module.css";
 import Modal, { RowProps } from "./DropDownModal";
 
 interface DropDownProps<T> {

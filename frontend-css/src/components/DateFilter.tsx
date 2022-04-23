@@ -6,7 +6,7 @@ import {
   QueryInput,
 } from "@src/generated/graphql";
 import { Queries } from "@src/graphql/definitions";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "../../styles/DateFilter.module.css";
 import Button from "../elements/Button";
 import CustomDatePicker from "../elements/CustomDatePicker";
@@ -36,7 +36,7 @@ const DateFilter = () => {
     client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
       query: Queries.GET_EXCHANGES,
       data: filteredData.data,
-      variables: {},
+      variables: {}, //todo
     });
   };
 
@@ -77,7 +77,7 @@ const DateFilter = () => {
         variant="outlined"
         onClick={() => queryHandler()}
       />
-      <Button label="setcachee" variant="outlined" onClick={async () => {}} />
+      {/* <Button label="setcachee" variant="outlined" onClick={async () => {}} /> */}
     </div>
   );
 };

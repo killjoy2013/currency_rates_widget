@@ -58,11 +58,15 @@ const resolvers = {
 
         let result = await Exchange.find({ ...params })
           .sort({ dateTime: -1 })
-          .limit(10);
+          .limit(5);
+
+        console.log({ result });
 
         return result;
       } else {
-        return await Exchange.find().sort({ dateTime: -1 }).limit(10);
+        let result = await Exchange.find().sort({ dateTime: -1 }).limit(5);
+
+        return result;
       }
     },
   },

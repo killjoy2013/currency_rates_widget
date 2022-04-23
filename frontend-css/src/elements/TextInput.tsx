@@ -1,9 +1,8 @@
-import styles from "../../styles/TextInput.module.css";
-import genericStyles from "../../styles/Generic.module.css";
-
-import { CurrencyItemType } from "../components/ExchangeForm";
+import styles from "@styles/TextInput.module.css";
+import genericStyles from "@styles/Generic.module.css";
+import { CurrencyItemType } from "@src/components/ExchangeForm";
 import { FunctionComponent, useState, useEffect } from "react";
-import { getCurrencyDisplayText } from "../helpers/TextHelpers";
+import { getCurrencyDisplayText } from "@src/helpers/TextHelpers";
 
 interface TextInputProps {
   label: string;

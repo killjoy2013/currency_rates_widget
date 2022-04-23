@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import clsx from "clsx";
-import styles from "../../styles/Button.module.css";
+import styles from "@styles/Button.module.css";
 
 type ButtonProps = {
   label: string;
