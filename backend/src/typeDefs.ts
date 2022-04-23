@@ -9,6 +9,11 @@ const typeDefs = gql`
     LivePrice
   }
 
+  enum Status {
+    Approved
+    Rejected
+  }
+
   type Exchange {
     id: ID
     dateTime: Date
@@ -19,13 +24,17 @@ const typeDefs = gql`
     type: PriceType
   }
 
+  type Transaction {
+    exchange: Exchange
+    status: Status
+  }
+
   type Query {
-    getExchanges(input: QueryInput): [Exchange]
-    # filterExchanges(dateTime: Date!): [Exchange]
+    getExchanges(input: QueryInput): [Exchange!]!
   }
 
   type Mutation {
-    createExchange(input: CreateInput!): Exchange
+    createExchange(input: CreateInput!): Transaction!
   }
 
   input CreateInput {

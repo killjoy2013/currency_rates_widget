@@ -7,6 +7,11 @@ enum PriceType {
   LivePrice = "LivePrice",
 }
 
+enum Status {
+  Approved = "Approved",
+  Rejected = "Rejected",
+}
+
 type CreateInputType = {
   currencyFrom: string;
   amount1: number;
@@ -68,8 +73,6 @@ const resolvers = {
         input: { amount1, amount2, currencyFrom, currencyTo, type },
       } = args;
 
-      console.log({ amount1, amount2, currencyFrom, currencyTo, type });
-
       const exchange = new Exchange({
         dateTime: new Date(),
         amount1,
@@ -81,9 +84,10 @@ const resolvers = {
 
       await exchange.save();
 
-      return exchange;
-
-      console.log(exchange);
+      return {
+        exchange,
+        status: Status.Approved,
+      };
     },
   },
 };

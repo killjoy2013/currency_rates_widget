@@ -40,7 +40,7 @@ export type Exchange = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createExchange?: Maybe<Exchange>;
+  createExchange: Transaction;
 };
 
 
@@ -56,7 +56,7 @@ export enum PriceType {
 
 export type Query = {
   __typename?: 'Query';
-  getExchanges?: Maybe<Array<Maybe<Exchange>>>;
+  getExchanges: Array<Exchange>;
 };
 
 
@@ -70,19 +70,30 @@ export type QueryInput = {
   type?: InputMaybe<PriceType>;
 };
 
+export enum Status {
+  Approved = 'Approved',
+  Rejected = 'Rejected'
+}
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  exchange?: Maybe<Exchange>;
+  status?: Maybe<Status>;
+};
+
 export type GetExchangesQueryVariables = Exact<{
   input?: InputMaybe<QueryInput>;
 }>;
 
 
-export type GetExchangesQuery = { __typename?: 'Query', getExchanges?: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null> | null };
+export type GetExchangesQuery = { __typename?: 'Query', getExchanges: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null }> };
 
 export type CreateExchangeMutationVariables = Exact<{
   input: CreateInput;
 }>;
 
 
-export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange?: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null };
+export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status?: Status | null, exchange?: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null } };
 
 
 export const GetExchangesDocument = gql`
@@ -129,13 +140,16 @@ export type GetExchangesQueryResult = Apollo.QueryResult<GetExchangesQuery, GetE
 export const CreateExchangeDocument = gql`
     mutation createExchange($input: CreateInput!) {
   createExchange(input: $input) {
-    id
-    dateTime
-    currencyFrom
-    amount1
-    currencyTo
-    amount2
-    type
+    exchange {
+      id
+      dateTime
+      currencyFrom
+      amount1
+      currencyTo
+      amount2
+      type
+    }
+    status
   }
 }
     `;
@@ -244,7 +258,9 @@ export type ResolversTypes = {
   PriceType: PriceType;
   Query: ResolverTypeWrapper<{}>;
   QueryInput: QueryInput;
+  Status: Status;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Transaction: ResolverTypeWrapper<Transaction>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -259,6 +275,7 @@ export type ResolversParentTypes = {
   Query: {};
   QueryInput: QueryInput;
   String: Scalars['String'];
+  Transaction: Transaction;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -277,11 +294,17 @@ export type ExchangeResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createExchange?: Resolver<Maybe<ResolversTypes['Exchange']>, ParentType, ContextType, RequireFields<MutationCreateExchangeArgs, 'input'>>;
+  createExchange?: Resolver<ResolversTypes['Transaction'], ParentType, ContextType, RequireFields<MutationCreateExchangeArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getExchanges?: Resolver<Maybe<Array<Maybe<ResolversTypes['Exchange']>>>, ParentType, ContextType, Partial<QueryGetExchangesArgs>>;
+  getExchanges?: Resolver<Array<ResolversTypes['Exchange']>, ParentType, ContextType, Partial<QueryGetExchangesArgs>>;
+};
+
+export type TransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = {
+  exchange?: Resolver<Maybe<ResolversTypes['Exchange']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['Status']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -289,5 +312,6 @@ export type Resolvers<ContextType = any> = {
   Exchange?: ExchangeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Transaction?: TransactionResolvers<ContextType>;
 };
 

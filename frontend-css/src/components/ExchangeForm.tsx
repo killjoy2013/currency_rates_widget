@@ -1,12 +1,19 @@
+import { useApolloClient } from "@apollo/client";
 import {
   CreateExchangeMutation,
   CreateExchangeMutationVariables,
+  Exchange,
+  GetExchangesQuery,
+  GetExchangesQueryVariables,
   PriceType,
+  Status,
+  Transaction,
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
+import { Queries } from "@src/graphql/definitions";
 import graphqlRequestClient from "@src/lib/graphqlRequestClient";
 import Image from "next/image";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import styles from "../../styles/ExchangeForm.module.css";
 import genericStyles from "../../styles/Generic.module.css";
 import Button from "../elements/Button";
@@ -261,13 +268,13 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 const ExchangeForm = () => {
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
   const [showModal, setShowModal] = useState(false);
-
+  const [transaction, setTransaction] = useState<Transaction>();
+  const client = useApolloClient();
   const [createExchange] = useCreateExchangeMutation();
 
   const createHandler = () => {
     const { amountFrom, amountTo, currencyFrom, currencyTo } = state;
-
-    createExchange({
+    const onTransactionCompleted = createExchange({
       variables: {
         input: {
           amount1: amountFrom as number,
@@ -276,6 +283,27 @@ const ExchangeForm = () => {
           currencyTo: currencyTo.abbr,
           type: PriceType.Exchanged,
         },
+      },
+      onCompleted: ({ createExchange: transaction }) => {
+        if (transaction?.status == Status.Approved) {
+          const { getExchanges: originalData } = client.readQuery<
+            GetExchangesQuery,
+            GetExchangesQueryVariables
+          >({
+            query: Queries.GET_EXCHANGES,
+            variables: {}, //todo
+          }) as GetExchangesQuery;
+
+          client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
+            query: Queries.GET_EXCHANGES,
+            data: {
+              getExchanges: [transaction.exchange as Exchange, ...originalData],
+            },
+            variables: {},
+          });
+        }
+        setTransaction(transaction as Transaction);
+        setShowModal(true);
       },
     });
   };
@@ -326,22 +354,18 @@ const ExchangeForm = () => {
         value={state.amountTo as number}
         currencyItem={state.currencyTo}
       />
-      <Button
-        label="Save"
-        variant="filled"
-        onClick={() => setShowModal(true)}
-      />
+      <Button label="Save" variant="filled" onClick={createHandler} />
       <Modal
         show={showModal}
         title="Exchange"
         onClose={() => setShowModal(false)}
       >
-        <ExchangeModalContent
-          date={new Date()}
-          status="Approved"
-          formState={state}
-          onClose={() => createHandler()}
-        />
+        {transaction && (
+          <ExchangeModalContent
+            transaction={transaction}
+            onClose={() => setShowModal(false)}
+          />
+        )}
       </Modal>
     </div>
   );

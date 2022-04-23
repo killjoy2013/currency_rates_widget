@@ -4,34 +4,43 @@ import styles from "../../styles/ExchangeModalContent.module.css";
 import Button from "../elements/Button";
 import { FormState } from "./ExchangeForm";
 import { getCurrencyDisplayText } from "../helpers/TextHelpers";
+import { Exchange, Transaction } from "@src/generated/graphql";
 
 interface ExchangeModalContentProps {
-  formState: FormState;
-  date: Date;
-  status: string;
+  transaction: Transaction;
   onClose: () => void;
 }
 
 const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
-  formState,
-  date,
-  status,
+  transaction,
   onClose,
 }) => {
-  const { amountFrom, amountTo, currencyFrom, currencyTo } = formState;
+  const { status } = transaction;
+  const { exchange } = transaction;
+
+  const { amount1, amount2, currencyFrom, currencyTo, dateTime, type } =
+    exchange as Exchange;
+
+  console.log({
+    status,
+    amount1,
+    amount2,
+    currencyFrom,
+    currencyTo,
+    dateTime,
+    type,
+  });
 
   const TotalAmountDisplay = () => {
     return (
       <>
         <div className={styles.totalAmount}>
           <strong>
-            {getCurrencyDisplayText(amountTo as number, currencyTo.abbr)}
+            {getCurrencyDisplayText(amount2 as number, currencyTo as string)}
           </strong>
           &nbsp; &nbsp; &nbsp;
           <div>
-            {`${currencyFrom.abbr} ${getCurrencyDisplayText(
-              amountFrom as number
-            )}`}
+            {`${currencyFrom} ${getCurrencyDisplayText(amount2 as number)}`}
           </div>
         </div>
       </>
@@ -42,13 +51,13 @@ const ExchangeModalContent: FunctionComponent<ExchangeModalContentProps> = ({
     <div className={styles.modalContainer}>
       <div className={styles.body}>
         <div>Date & Time </div>
-        <div>{moment(date).format("DD/mm/yyyy HH:mm")} </div>
+        <div>{moment(dateTime).format("DD/mm/yyyy HH:mm")} </div>
         <div>Status </div>
         <div>{status}</div>
         <div>From </div>
-        <div>{currencyFrom.name}</div>
+        <div>{currencyFrom}</div>
         <div>To </div>
-        <div>{currencyTo.abbr}</div>
+        <div>{currencyTo}</div>
         <div>Total Amount </div>
         <TotalAmountDisplay />
       </div>

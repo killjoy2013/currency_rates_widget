@@ -7,9 +7,9 @@ import RateListMobile from "./RateListMobile";
 const ExchangeList = () => {
   const { data, error, loading } = useGetExchangesQuery();
 
-  useEffect(() => {
-    data && console.log({ data });
-  }, [!!data]);
+  // useEffect(() => {
+  //   data && console.log({ data });
+  // }, [!!data]);
 
   return (
     <>

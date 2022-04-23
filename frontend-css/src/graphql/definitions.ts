@@ -17,13 +17,16 @@ const GET_EXCHANGES = gql`
 const CREATE_EXCHANGE = gql`
   mutation createExchange($input: CreateInput!) {
     createExchange(input: $input) {
-      id
-      dateTime
-      currencyFrom
-      amount1
-      currencyTo
-      amount2
-      type
+      exchange {
+        id
+        dateTime
+        currencyFrom
+        amount1
+        currencyTo
+        amount2
+        type
+      }
+      status
     }
   }
 `;
