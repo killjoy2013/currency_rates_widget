@@ -3,8 +3,10 @@ import styles from "@styles/ExchangeListDesktop.module.css";
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import DateFilter from "../DateFilter";
 import Pagination from "../Pagination";
-import { Exchange } from "@src/generated/graphql";
+import { Exchange, PriceType } from "@src/generated/graphql";
 import moment from "moment";
+import { formatNumber } from "@src/helpers/TextHelpers";
+import clsx from "clsx";
 
 interface ExchangeListDesktopProps {
   list: Array<Exchange | null>;
@@ -40,13 +42,23 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
           {list.map((exchange, i) => (
             <tr key={i} className={styles.tr}>
               <td className={styles.td}>
-                {moment(exchange?.dateTime).format("DD/mm/yyyy HH:mm")}
+                {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
               </td>
               <td className={styles.td}>{exchange?.currencyFrom}</td>
-              <td className={styles.td}>{exchange?.amount1}</td>
+              <td className={styles.td}>
+                {formatNumber(exchange?.amount1, 2)}
+              </td>
               <td className={styles.td}>{exchange?.currencyTo}</td>
-              <td className={styles.td}>{exchange?.amount2}</td>
-              <td className={`${styles.td} ${styles.livePrice}`}>
+              <td className={clsx(styles.td, styles.number)}>
+                {formatNumber(exchange?.amount2, 2)}
+              </td>
+              <td
+                className={clsx(
+                  styles.td,
+                  exchange?.type == PriceType.Exchanged && styles.exchanged,
+                  exchange?.type == PriceType.LivePrice && styles.livePrice
+                )}
+              >
                 {exchange?.type}
               </td>
             </tr>

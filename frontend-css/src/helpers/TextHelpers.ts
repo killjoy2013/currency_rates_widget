@@ -14,3 +14,10 @@ export const getCurrencyDisplayText = (value: number, abbr?: string) => {
     return formatter.format(value);
   }
 };
+
+export const formatNumber = (
+  value: number | undefined | null,
+  precision: number
+) => {
+  return Number(value?.toFixed(precision)).toLocaleString();
+};

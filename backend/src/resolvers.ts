@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
-import Exchange from "./models/Exchange.model";
+import ExchangeModel from "./models/Exchange.model";
 import { CreateExchangeType, PriceType, Status, Transaction } from "./types";
 
 type CreateArgs = {
@@ -10,6 +10,7 @@ type QueryInputType = {
   fromDate: Date;
   toDate: Date;
   type: PriceType;
+  pageNumber: number;
 };
 
 type QueryArgs = {
@@ -19,9 +20,11 @@ type QueryArgs = {
 const resolvers = {
   Query: {
     getExchanges: async (_: undefined, args: QueryArgs) => {
+      let pageSize = parseInt(process.env.PAGE_SIZE as string);
+
       if (args.input) {
         const {
-          input: { fromDate, toDate, type },
+          input: { fromDate, toDate, type, pageNumber = 0 },
         } = args;
 
         const params: any = {};
@@ -33,11 +36,16 @@ const resolvers = {
           params.type = type;
         }
 
-        return await Exchange.find({ ...params })
+        let result = await ExchangeModel.find({ ...params })
           .sort({ dateTime: -1 })
-          .limit(5);
+          .skip(pageSize * pageNumber)
+          .limit(pageSize);
+
+        return result;
       } else {
-        return await Exchange.find().sort({ dateTime: -1 }).limit(5);
+        return await ExchangeModel.find()
+          .sort({ dateTime: -1 })
+          .limit(pageSize);
       }
     },
   },
@@ -51,7 +59,7 @@ const resolvers = {
         input: { amount1, amount2, currencyFrom, currencyTo, type },
       } = args;
 
-      const exchange = new Exchange({
+      const exchange = new ExchangeModel({
         dateTime: new Date(),
         amount1,
         amount2,

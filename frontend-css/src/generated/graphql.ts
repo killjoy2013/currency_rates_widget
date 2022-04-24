@@ -66,6 +66,7 @@ export type QueryGetExchangesArgs = {
 
 export type QueryInput = {
   fromDate?: InputMaybe<Scalars['Date']>;
+  pageNumber?: InputMaybe<Scalars['Int']>;
   toDate?: InputMaybe<Scalars['Date']>;
   type?: InputMaybe<PriceType>;
 };
@@ -77,8 +78,8 @@ export enum Status {
 
 export type Transaction = {
   __typename?: 'Transaction';
-  exchange?: Maybe<Exchange>;
-  status?: Maybe<Status>;
+  exchange: Exchange;
+  status: Status;
 };
 
 export type GetExchangesQueryVariables = Exact<{
@@ -93,7 +94,7 @@ export type CreateExchangeMutationVariables = Exact<{
 }>;
 
 
-export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status?: Status | null, exchange?: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } | null } };
+export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status: Status, exchange: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } } };
 
 
 export const GetExchangesDocument = gql`
@@ -254,6 +255,7 @@ export type ResolversTypes = {
   Exchange: ResolverTypeWrapper<Exchange>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   PriceType: PriceType;
   Query: ResolverTypeWrapper<{}>;
@@ -271,6 +273,7 @@ export type ResolversParentTypes = {
   Exchange: Exchange;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
+  Int: Scalars['Int'];
   Mutation: {};
   Query: {};
   QueryInput: QueryInput;
@@ -302,8 +305,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type TransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = {
-  exchange?: Resolver<Maybe<ResolversTypes['Exchange']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['Status']>, ParentType, ContextType>;
+  exchange?: Resolver<ResolversTypes['Exchange'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Status'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -9,7 +9,7 @@ export enum Status {
   Rejected = "Rejected",
 }
 
-export type ExchangeType = {
+export type Exchange = {
   id: string;
   dateTime: Date;
   currencyFrom: string;
@@ -20,11 +20,11 @@ export type ExchangeType = {
 };
 
 export type Transaction = {
-  exchange: ExchangeType;
+  exchange: Exchange;
   status: Status;
 };
 
-export type CreateExchangeType = Omit<ExchangeType, "id">;
+export type CreateExchangeType = Omit<Exchange, "id">;
 
 export type CoinApiResponse = {
   asset_id_base: string;

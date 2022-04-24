@@ -1,11 +1,11 @@
 import https from "https";
 import dotenv from "dotenv";
-import Exchange from "./models/Exchange.model";
+import ExchangeModel from "./models/Exchange.model";
 import { SocketRepository } from "./socket_repository";
 import {
   CoinApiResponse,
   CreateExchangeType,
-  ExchangeType,
+  Exchange,
   PriceType,
 } from "./types";
 
@@ -14,7 +14,8 @@ export class Faker {
     method: "GET",
     hostname: "rest.coinapi.io",
     path: "/v1/exchangerate/",
-    headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
+    // headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
+    headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
   };
 
   static FROM_CURRENCIES;
@@ -39,7 +40,6 @@ export class Faker {
   }
 
   public static startFake = async () => {
-    await Faker.fakerJob();
     setInterval(async () => {
       console.log("gooooo");
       await Faker.fakerJob();
@@ -97,14 +97,16 @@ export class Faker {
         (f) => f.asset_id_quote == toCurrency
       );
       try {
-        result.push({
-          amount1: 1,
-          amount2: rateItem?.rate as number,
-          currencyFrom: fromCurrency,
-          currencyTo: rateItem?.asset_id_quote as string,
-          dateTime: new Date(rateItem?.time as string),
-          type: PriceType.LivePrice,
-        });
+        result.push(
+          new ExchangeModel({
+            amount1: 1,
+            amount2: rateItem?.rate as number,
+            currencyFrom: fromCurrency,
+            currencyTo: rateItem?.asset_id_quote as string,
+            dateTime: new Date(rateItem?.time as string),
+            type: PriceType.LivePrice,
+          })
+        );
       } catch (error) {
         console.error(error);
       }
@@ -113,8 +115,18 @@ export class Faker {
     return result;
   };
 
-  static insertAndEmit = async (itemsToInsert: CreateExchangeType[]) => {
-    await Exchange.create(itemsToInsert);
-    SocketRepository.emitMessage(itemsToInsert);
+  static insertAndEmit = async (itemsToInsert: any[]) => {
+    console.log("before", itemsToInsert);
+
+    await ExchangeModel.create(itemsToInsert);
+
+    let convertedItems = itemsToInsert.map((m: any) => ({
+      ...m._doc,
+      id: m._doc._id,
+    }));
+
+    console.log("after", convertedItems);
+
+    SocketRepository.emitMessage(convertedItems);
   };
 }

@@ -41,7 +41,7 @@ export class SocketRepository {
 
   public static emitMessage = (exchanges: CreateExchangeType[]) => {
     SocketRepository.sockets.forEach((socket) => {
-      socket.emit("FAKE_EXCHANGE_CREATED", exchanges);
+      socket.emit("FAKE_EXCHANGE_CREATED", { exchanges });
     });
   };
 }

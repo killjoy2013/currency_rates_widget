@@ -1,24 +1,20 @@
 import { useApolloClient } from "@apollo/client";
+import Button from "@src/elements/Button";
+import DropDown from "@src/elements/DropDown";
+import TextInput from "@src/elements/TextInput";
 import {
-  Exchange,
-  GetExchangesQuery,
-  GetExchangesQueryVariables,
   PriceType,
   Status,
   Transaction,
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
-import { Queries } from "@src/graphql/definitions";
-import Image from "next/image";
-import { useContext, useReducer, useState } from "react";
 import { HandlerContext } from "@src/pages/HandlerContext";
 import styles from "@styles/ExchangeForm.module.css";
 import genericStyles from "@styles/Generic.module.css";
-import Button from "@src/elements/Button";
-import DropDown from "@src/elements/DropDown";
-import TextInput from "@src/elements/TextInput";
-import ExchangeModalContent from "./TransactionModalContent";
+import Image from "next/image";
+import { useContext, useReducer, useState } from "react";
 import Modal from "./Modal";
+import ExchangeModalContent from "./TransactionModalContent";
 
 export type EventType = {
   name: string;
@@ -264,7 +260,7 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const ExchangeForm = () => {
-  const { addFakeDataToCache } = useContext(HandlerContext);
+  const { addExchangeToCache } = useContext(HandlerContext);
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
   const [showModal, setShowModal] = useState(false);
   const [transaction, setTransaction] = useState<Transaction>();
@@ -284,22 +280,10 @@ const ExchangeForm = () => {
         },
       },
       onCompleted: ({ createExchange: transaction }) => {
-        if (transaction?.status == Status.Approved) {
-          const { getExchanges: originalData } = client.readQuery<
-            GetExchangesQuery,
-            GetExchangesQueryVariables
-          >({
-            query: Queries.GET_EXCHANGES,
-            variables: {}, //todo
-          }) as GetExchangesQuery;
+        console.log({ transaction });
 
-          client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
-            query: Queries.GET_EXCHANGES,
-            data: {
-              getExchanges: [transaction.exchange as Exchange, ...originalData],
-            },
-            variables: {},
-          });
+        if (transaction.status == Status.Approved) {
+          addExchangeToCache([transaction.exchange]);
         }
         setTransaction(transaction as Transaction);
         setShowModal(true);

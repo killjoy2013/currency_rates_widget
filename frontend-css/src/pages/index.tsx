@@ -11,28 +11,6 @@ import io, { Socket } from "socket.io-client";
 import { HandlerProvider } from "./HandlerContext";
 
 const Home = () => {
-  const socketRef = useRef<Socket>();
-
-  useEffect(() => {
-    if (!socketRef.current) {
-      socketRef.current = io("http://localhost:4000", {
-        reconnection: false,
-      });
-
-      socketRef.current.on("connect", () => {
-        console.log("a user connected");
-      });
-
-      socketRef.current.on("disconnect", () => {
-        console.log("disconnected");
-      });
-
-      socketRef.current.on("FAKE_EXCHANGE_CREATED", (data) => {
-        console.log(data);
-      });
-    }
-  }, [socketRef.current]);
-
   return (
     <Suspense fallback={<>Waiting...</>}>
       <HandlerProvider>

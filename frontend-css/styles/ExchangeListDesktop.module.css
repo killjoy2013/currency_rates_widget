@@ -65,60 +65,6 @@
   color: var(--live-price-color);
 }
 
-/* 
-.mobile {
-  display: none;
-  align-content: start;
-  margin-top: 5rem;
-  gap: 2rem;
-}
-
-.box {
-  display: grid;
-  align-content: start;
-  background-color: var(--neutral-color);
-  border-radius: var(--border-radius-big);
-  padding: 1.3rem 1rem;
-  gap: 2rem;
-}
-
-.upper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.lower {
-  display: flex;
-  justify-items: start;
-  align-items: center;
-}
-
-.transaction {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.indicator {
-  width: 16px;
-  height: 16px;
-  border-radius: 8px;
-}
-
-.exchange {
-  background-color: var(--exchange-color);
-}
-
-.live {
-  background-color: var(--live-price-color);
-} */
-
-/* @media (max-width: 1200px) {
-  .mobile {
-    display: grid;
-  }
-} */
-
 @media (max-width: 1200px) {
   .desktop {
     display: none;

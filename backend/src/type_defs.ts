@@ -25,8 +25,8 @@ const typeDefs = gql`
   }
 
   type Transaction {
-    exchange: Exchange
-    status: Status
+    exchange: Exchange!
+    status: Status!
   }
 
   type Query {
@@ -49,6 +49,7 @@ const typeDefs = gql`
     fromDate: Date
     toDate: Date
     type: PriceType
+    pageNumber: Int
   }
 `;
 
