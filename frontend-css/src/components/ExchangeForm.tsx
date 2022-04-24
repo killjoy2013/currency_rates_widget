@@ -10,7 +10,8 @@ import {
 } from "@src/generated/graphql";
 import { Queries } from "@src/graphql/definitions";
 import Image from "next/image";
-import { useReducer, useState } from "react";
+import { useContext, useReducer, useState } from "react";
+import { HandlerContext } from "@src/pages/HandlerContext";
 import styles from "@styles/ExchangeForm.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import Button from "@src/elements/Button";
@@ -263,6 +264,7 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const ExchangeForm = () => {
+  const { addFakeDataToCache } = useContext(HandlerContext);
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
   const [showModal, setShowModal] = useState(false);
   const [transaction, setTransaction] = useState<Transaction>();

@@ -16,8 +16,6 @@ dotenv.config();
 async function startServer() {
   const app = express();
 
-  console.log(process.env.TO_CURRENCIES);
-
   app.use(
     cors({
       origin: "*",
@@ -57,14 +55,7 @@ async function startServer() {
   });
 
   SocketRepository.setIo(io);
-  await Faker.startFake();
-
-  // io.on("connection", (socket) => {
-  //   console.log(socket.id);
-  //   io.on("disconnect", (socket) => {
-  //     console.log(`${socket.id} disconnected`);
-  //   });
-  // });
+  //await Faker.startFake();
 }
 
 startServer();
