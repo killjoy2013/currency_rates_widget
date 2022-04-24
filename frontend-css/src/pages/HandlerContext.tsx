@@ -10,10 +10,12 @@ import { io, Socket } from "socket.io-client";
 
 interface IHandlerContext {
   addExchangeToCache: (exchanges: Array<Exchange>) => void;
+  sortList: (field: keyof Exchange, sortAsc: boolean) => void;
 }
 
 const defaultState = {
   addExchangeToCache: (exchanges: Array<Exchange>) => {},
+  sortList: (field: keyof Exchange, sortAsc: boolean) => {},
 };
 
 const HandlerContext = createContext<IHandlerContext>(defaultState);
@@ -66,10 +68,47 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
     });
   };
 
+  const sortList = (field: keyof Exchange, sortAsc: boolean) => {
+    const { getExchanges: originalData } = client.readQuery<
+      GetExchangesQuery,
+      GetExchangesQueryVariables
+    >({
+      query: Queries.GET_EXCHANGES,
+      variables: {}, //todo
+    }) as GetExchangesQuery;
+
+    client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
+      query: Queries.GET_EXCHANGES,
+      data: {
+        getExchanges: [...originalData].sort((a, b) => {
+          if (sortAsc) {
+            if (a[field] < b[field]) {
+              return -1;
+            } else if (a[field] < b[field]) {
+              return 1;
+            } else {
+              return 0;
+            }
+          } else {
+            if (a[field] > b[field]) {
+              return -1;
+            } else if (a[field] < b[field]) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        }),
+      },
+      variables: {},
+    });
+  };
+
   return (
     <HandlerContext.Provider
       value={{
         addExchangeToCache,
+        sortList,
       }}
     >
       {children}
