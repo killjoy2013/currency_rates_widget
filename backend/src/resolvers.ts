@@ -21,16 +21,17 @@ const resolvers = {
   Query: {
     getExchanges: async (_: undefined, args: QueryArgs) => {
       let pageSize = parseInt(process.env.PAGE_SIZE as string);
-
       if (args.input) {
         const {
           input: { fromDate, toDate, type, pageNumber = 0 },
         } = args;
 
+        let toDate2 = new Date(toDate);
+
+        /*incrementing toDate by by day to cover the last day*/
+        toDate2.setDate(toDate2.getDate() + 1);
         const params: any = {};
-        if (fromDate != toDate) {
-          params.dateTime = { $gte: fromDate, $lte: toDate };
-        }
+        params.dateTime = { $gte: fromDate, $lte: toDate2 };
 
         if (type == PriceType.LivePrice || type == PriceType.Exchanged) {
           params.type = type;

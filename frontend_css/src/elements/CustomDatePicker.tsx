@@ -36,7 +36,19 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
       wrapperClassName={styles.datePicker}
       customInput={React.createElement(React.forwardRef(CustomInput))}
       selected={value}
-      onChange={(date: Date) => onChange({ value: date })}
+      onChange={(date: Date) => {
+        onChange({
+          value: new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            0,
+            0,
+            0,
+            0
+          ),
+        });
+      }}
     />
   );
 };
