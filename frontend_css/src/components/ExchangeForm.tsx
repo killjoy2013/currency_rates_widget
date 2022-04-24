@@ -1,3 +1,4 @@
+import React, { useContext, useReducer, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import Button from "@src/elements/Button";
 import DropDown from "@src/elements/DropDown";
@@ -8,11 +9,10 @@ import {
   Transaction,
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
-import { HandlerContext } from "@src/pages/HandlerContext";
+import { HandlerContext } from "@src/contexts/HandlerContext";
 import styles from "@styles/ExchangeForm.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import Image from "next/image";
-import { useContext, useReducer, useState } from "react";
 import Modal from "./Modal";
 import ExchangeModalContent from "./TransactionModalContent";
 

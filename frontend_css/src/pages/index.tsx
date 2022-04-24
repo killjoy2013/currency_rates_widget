@@ -1,14 +1,12 @@
-import { Queries } from "@src/graphql/definitions";
-import { initializeApollo } from "@src/lib/apolloClient";
-import clsx from "clsx";
-import { GetServerSideProps } from "next";
-import React, { Suspense, useContext } from "react";
-import styles from "@styles/Widget.module.css";
+import React, { Suspense } from "react";
 import ExchangeForm from "@src/components/ExchangeForm";
 import ExchangeList from "@src/components/ExchangeList";
-import { useRef, useEffect } from "react";
-import io, { Socket } from "socket.io-client";
-import { HandlerProvider } from "./HandlerContext";
+import { Queries } from "@src/graphql/definitions";
+import { initializeApollo } from "@src/lib/apolloClient";
+import styles from "@styles/Widget.module.css";
+import clsx from "clsx";
+import { GetServerSideProps } from "next";
+import { HandlerProvider } from "@src/contexts/HandlerContext";
 
 const Home = () => {
   return (

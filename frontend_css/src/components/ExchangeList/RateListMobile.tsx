@@ -1,5 +1,5 @@
-import { Exchange } from "@src/generated/graphql";
 import React, { FunctionComponent } from "react";
+import { Exchange } from "@src/generated/graphql";
 import classes from "@styles/ExchangeListMobile.module.css";
 import DateFilter from "../DateFilter";
 

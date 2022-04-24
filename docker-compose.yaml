@@ -1,0 +1,24 @@
+version: "3.3"
+services:
+  frontend:
+    restart: always
+    image: frontend:latest
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_GRAPHQL_URL_CLIENT=http://localhost:4000/graphql
+      - GRAPHQL_URL_SSR=http://backend:4000/graphql
+
+  backend:
+    restart: always
+    image: backend:latest
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGODB_CONNECTION=mongodb+srv://testuser:testpass@cluster0.ex1fq.mongodb.net/taskdb?retryWrites=true&w=majority
+      - FAKER_INTERVAL_MIN=2
+      - FROM_CURRENCIES="BTC,ETH,XRP,LTC"
+      - TO_CURRENCIES="CAD,USD,EUR,GBP"
+      - PAGE_SIZE=8

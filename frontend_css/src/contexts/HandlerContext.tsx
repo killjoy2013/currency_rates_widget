@@ -1,3 +1,4 @@
+import React, { createContext, useEffect, useRef } from "react";
 import { useApolloClient } from "@apollo/client";
 import {
   Exchange,
@@ -5,7 +6,6 @@ import {
   GetExchangesQueryVariables,
 } from "@src/generated/graphql";
 import { Queries } from "@src/graphql/definitions";
-import React, { createContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
 interface IHandlerContext {

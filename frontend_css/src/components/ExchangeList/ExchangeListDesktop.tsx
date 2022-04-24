@@ -7,7 +7,7 @@ import { Exchange, PriceType } from "@src/generated/graphql";
 import moment from "moment";
 import { formatNumber } from "@src/helpers/TextHelpers";
 import clsx from "clsx";
-import { HandlerContext } from "@src/pages/HandlerContext";
+import { HandlerContext } from "@src/contexts/HandlerContext";
 
 interface ExchangeListDesktopProps {
   list: Array<Exchange | null>;

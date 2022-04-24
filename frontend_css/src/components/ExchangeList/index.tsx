@@ -1,5 +1,5 @@
-import { useGetExchangesQuery } from "@src/generated/graphql";
 import React from "react";
+import { useGetExchangesQuery } from "@src/generated/graphql";
 import RateListDesktop from "./ExchangeListDesktop";
 import RateListMobile from "./RateListMobile";
 
