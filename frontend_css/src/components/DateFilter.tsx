@@ -1,5 +1,5 @@
-import React from "react";
-import { useApolloClient } from "@apollo/client";
+import React, { useContext } from "react";
+import { useApolloClient, useReactiveVar } from "@apollo/client";
 import {
   GetExchangesQuery,
   GetExchangesQueryVariables,
@@ -12,34 +12,32 @@ import styles from "../../styles/DateFilter.module.css";
 import Button from "../elements/Button";
 import CustomDatePicker from "../elements/CustomDatePicker";
 import DropDown from "../elements/DropDown";
+import { filterFormDataVar } from "@src/lib/cache";
+import { HandlerContext } from "@src/contexts/HandlerContext";
 
 const DateFilter = () => {
-  const [formData, setFormData] = useState<QueryInput>({
-    fromDate: new Date(),
-    toDate: new Date(),
-    type: PriceType.All,
-  });
-
   const client = useApolloClient();
+  const filterFormData = useReactiveVar(filterFormDataVar);
+  const { queryHandler } = useContext(HandlerContext);
 
-  const queryHandler = async () => {
-    let filteredData = await client.query<
-      GetExchangesQuery,
-      GetExchangesQueryVariables
-    >({
-      query: Queries.GET_EXCHANGES,
-      fetchPolicy: "network-only",
-      variables: {
-        input: { ...formData },
-      },
-    });
+  // const queryHandler = async () => {
+  //   let filteredData = await client.query<
+  //     GetExchangesQuery,
+  //     GetExchangesQueryVariables
+  //   >({
+  //     query: Queries.GET_EXCHANGES,
+  //     fetchPolicy: "network-only",
+  //     variables: {
+  //       input: { ...filterFormDataVar() },
+  //     },
+  //   });
 
-    client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
-      query: Queries.GET_EXCHANGES,
-      data: filteredData.data,
-      variables: {}, //todo
-    });
-  };
+  //   client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
+  //     query: Queries.GET_EXCHANGES,
+  //     data: filteredData.data,
+  //     variables: {}, //todo
+  //   });
+  // };
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
   const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
@@ -48,19 +46,40 @@ const DateFilter = () => {
     <div className={styles.container}>
       <CustomDatePicker
         name="fromDate"
-        value={formData?.fromDate}
+        value={filterFormData.fromDate}
         label="From date"
-        onChange={({ value }) => {
-          setFormData((prev) => ({ ...prev, fromDate: value }));
-          console.log({ value });
-        }}
+        onChange={({ value }) =>
+          filterFormDataVar({
+            ...filterFormDataVar(),
+            fromDate: new Date(
+              value.getFullYear(),
+              value.getMonth(),
+              value.getDate(),
+              0,
+              0,
+              0,
+              0
+            ),
+          })
+        }
       />
       <CustomDatePicker
         name="toDate"
-        value={formData?.toDate}
+        value={filterFormData.toDate}
         label="To date"
         onChange={({ value }) =>
-          setFormData((prev) => ({ ...prev, toDate: value }))
+          filterFormDataVar({
+            ...filterFormDataVar(),
+            toDate: new Date(
+              value.getFullYear(),
+              value.getMonth(),
+              value.getDate(),
+              0,
+              0,
+              0,
+              0
+            ),
+          })
         }
       />
       <DropDown<PriceType>
@@ -68,17 +87,18 @@ const DateFilter = () => {
         name="type"
         Row={TypeRow}
         Selected={TypeSelect}
-        value={formData.type as PriceType}
+        value={filterFormData.type as PriceType}
         label="Type"
         items={[PriceType.All, PriceType.Exchanged, PriceType.LivePrice]}
-        onChange={(type) => setFormData((prev) => ({ ...prev, type }))}
+        onChange={(type) =>
+          filterFormDataVar({ ...filterFormDataVar(), type: type })
+        }
       />
       <Button
         label="Filter"
         variant="outlined"
         onClick={() => queryHandler()}
       />
-      {/* <Button label="setcachee" variant="outlined" onClick={async () => {}} /> */}
     </div>
   );
 };

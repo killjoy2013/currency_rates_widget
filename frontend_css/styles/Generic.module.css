@@ -13,6 +13,27 @@
 .formLabel {
   font-size: 1.3rem;
 }
+.indicator {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.5rem;
+}
+
+.approvedIcon {
+  background-color: var(--primary-color);
+}
+
+.rejectedIcon {
+  background-color: var(--secondary-color);
+}
+
+.approvedText {
+  color: var(--primary-color);
+}
+
+.rejectedText {
+  color: var(--secondary-color);
+}
 
 @media (max-width: 1200px) {
   .form {

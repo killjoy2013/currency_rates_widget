@@ -26,6 +26,7 @@ const CREATE_EXCHANGE = gql`
     createExchange(input: $input) {
       exchange {
         id
+        fakeCycleId
         dateTime
         currencyFrom {
           name

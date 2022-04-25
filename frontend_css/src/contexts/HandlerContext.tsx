@@ -8,16 +8,18 @@ import {
 import { Queries } from "@src/graphql/definitions";
 import { io, Socket } from "socket.io-client";
 import { FAKE_EXCHANGE_CREATED } from "@src/constants";
-import { latestRatesVar } from "@src/lib/cache";
+import { filterFormDataVar, latestRatesVar } from "@src/lib/cache";
 
 interface IHandlerContext {
   addExchangeToCache: (exchanges: Array<Exchange>) => void;
   sortList: (field: keyof Exchange, sortAsc: boolean) => void;
+  queryHandler: () => void;
 }
 
 const defaultState = {
   addExchangeToCache: (exchanges: Array<Exchange>) => {},
   sortList: (field: keyof Exchange, sortAsc: boolean) => {},
+  queryHandler: () => {},
 };
 
 const HandlerContext = createContext<IHandlerContext>(defaultState);
@@ -66,6 +68,8 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       query: Queries.GET_EXCHANGES,
       variables: {}, //todo
     }) as GetExchangesQuery;
+
+    console.log({ originalData });
 
     let newExchanges = [...exchanges, ...originalData];
 
@@ -118,11 +122,31 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
     });
   };
 
+  const queryHandler = async () => {
+    let filteredData = await client.query<
+      GetExchangesQuery,
+      GetExchangesQueryVariables
+    >({
+      query: Queries.GET_EXCHANGES,
+      fetchPolicy: "network-only",
+      variables: {
+        input: { ...filterFormDataVar() },
+      },
+    });
+
+    client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
+      query: Queries.GET_EXCHANGES,
+      data: filteredData.data,
+      variables: {},
+    });
+  };
+
   return (
     <HandlerContext.Provider
       value={{
         addExchangeToCache,
         sortList,
+        queryHandler,
       }}
     >
       {children}

@@ -10,7 +10,7 @@ type QueryInputType = {
   fromDate: Date;
   toDate: Date;
   type: PriceType;
-  pageNumber: number;
+  pageSize: number;
 };
 
 type QueryArgs = {
@@ -21,9 +21,12 @@ const resolvers = {
   Query: {
     getExchanges: async (_: undefined, args: QueryArgs) => {
       let pageSize = parseInt(process.env.PAGE_SIZE as string);
+      let sorter = {
+        dateTime: -1,
+      };
       if (args.input) {
         const {
-          input: { fromDate, toDate, type, pageNumber = 0 },
+          input: { fromDate, toDate, type },
         } = args;
 
         let toDate2 = new Date(toDate);
@@ -38,15 +41,14 @@ const resolvers = {
         }
 
         let result = await ExchangeModel.find({ ...params })
-          .sort({ dateTime: -1 })
-          .skip(pageSize * pageNumber)
+          .sort(sorter)
           .limit(pageSize);
 
         return result;
       } else {
-        return await ExchangeModel.find()
-          .sort({ dateTime: -1 })
-          .limit(pageSize);
+        let result = await ExchangeModel.find().sort(sorter).limit(pageSize);
+        console.log({ result });
+        return result;
       }
     },
   },

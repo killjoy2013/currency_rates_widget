@@ -60,7 +60,6 @@ const typeDefs = gql`
     fromDate: Date
     toDate: Date
     type: PriceType
-    pageNumber: Int
   }
 `;
 

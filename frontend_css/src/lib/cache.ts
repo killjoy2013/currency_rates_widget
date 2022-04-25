@@ -1,5 +1,5 @@
 import { InMemoryCache, makeVar } from "@apollo/client";
-import { Exchange, PriceType } from "@src/generated/graphql";
+import { Exchange, PriceType, QueryInput } from "@src/generated/graphql";
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -13,6 +13,28 @@ export const cache: InMemoryCache = new InMemoryCache({
       },
     },
   },
+});
+
+export const filterFormDataVar = makeVar<QueryInput>({
+  fromDate: new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+    0,
+    0,
+    0,
+    0
+  ),
+  toDate: new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+    0,
+    0,
+    0,
+    0
+  ),
+  type: PriceType.All,
 });
 
 export const latestRatesVar = makeVar<Array<Exchange>>([

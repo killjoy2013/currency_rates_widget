@@ -49,6 +49,8 @@ const Pagination: React.FunctionComponent<PaginationProp> = ({
 }) => {
   const [activePage, setActivePage] = useState(1);
 
+  console.log({ activePage });
+
   const Next = useCallback(() => {
     return (
       <div
@@ -73,7 +75,7 @@ const Pagination: React.FunctionComponent<PaginationProp> = ({
         key="prev"
         className={styles.nextPrev}
         onClick={() => {
-          if (activePage > 0) {
+          if (activePage > 1) {
             onPageChange(activePage - 1);
             setActivePage((prev) => --prev);
           }

@@ -84,7 +84,6 @@ export type QueryGetExchangesArgs = {
 
 export type QueryInput = {
   fromDate?: InputMaybe<Scalars['Date']>;
-  pageNumber?: InputMaybe<Scalars['Int']>;
   toDate?: InputMaybe<Scalars['Date']>;
   type?: InputMaybe<PriceType>;
 };
@@ -112,7 +111,7 @@ export type CreateExchangeMutationVariables = Exact<{
 }>;
 
 
-export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status: Status, exchange: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, amount1?: number | null, amount2?: number | null, type?: PriceType | null, currencyFrom?: { __typename?: 'Currency', name: string, abbr: string } | null, currencyTo?: { __typename?: 'Currency', name: string, abbr: string } | null } } };
+export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status: Status, exchange: { __typename?: 'Exchange', id?: string | null, fakeCycleId?: number | null, dateTime?: any | null, amount1?: number | null, amount2?: number | null, type?: PriceType | null, currencyFrom?: { __typename?: 'Currency', name: string, abbr: string } | null, currencyTo?: { __typename?: 'Currency', name: string, abbr: string } | null } } };
 
 
 export const GetExchangesDocument = gql`
@@ -168,6 +167,7 @@ export const CreateExchangeDocument = gql`
   createExchange(input: $input) {
     exchange {
       id
+      fakeCycleId
       dateTime
       currencyFrom {
         name

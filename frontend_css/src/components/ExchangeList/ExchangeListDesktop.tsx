@@ -8,6 +8,7 @@ import moment from "moment";
 import { formatNumber } from "@src/helpers/TextHelpers";
 import clsx from "clsx";
 import { HandlerContext } from "@src/contexts/HandlerContext";
+import { filterFormDataVar } from "@src/lib/cache";
 
 interface ExchangeListDesktopProps {
   list: Array<Exchange | null>;
@@ -39,7 +40,7 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
   const [sortAsc, setSortAsc] = useState<boolean>(false);
   const [sortField, setSortField] = useState<keyof Exchange>("dateTime");
 
-  const { sortList } = useContext(HandlerContext);
+  const { sortList, queryHandler } = useContext(HandlerContext);
 
   const sortListHandler = (name: keyof Exchange) => {
     sortList(name, !sortAsc);
@@ -127,10 +128,7 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
             ))}
         </tbody>
       </table>
-      <Pagination
-        totalNumber={6}
-        onPageChange={(page) => console.log({ page })}
-      />
+      <Pagination totalNumber={6} onPageChange={queryHandler} />
     </div>
   );
 };
