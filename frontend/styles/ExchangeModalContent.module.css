@@ -1,0 +1,40 @@
+.modalContainer {
+  width: 30rem;
+  border-radius: 1rem 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-start;
+  align-content: flex-start; */
+}
+
+.body {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: stretch;
+  justify-items: start;
+  align-items: center;
+  font-size: 1.4rem;
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  row-gap: 1rem;
+}
+
+.footer {
+  /* display: flex;
+  justify-content: stretch;
+  align-items: center; */
+
+  grid-column: span 2;
+  align-self: stretch;
+}
+
+.totalAmount {
+  display: flex;
+}
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

@@ -1,0 +1,4 @@
+type CurrencyItemType {
+  abbr: String!
+  name: String!
+}

@@ -1,0 +1,18 @@
+schema: http://localhost:4000/graphql
+documents: "./src/graphql/definitions.ts"
+generates:
+  ./src/generated/graphql.ts:
+    schema: client-schema.graphql
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - typescript-resolvers
+    config:
+      withHOC: false
+      withHooks: true
+      withComponent: false
+      namingConvention:
+        enumValues: "keep"

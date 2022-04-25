@@ -1,0 +1,18 @@
+.button {
+  height: 3.4rem;
+  min-width: 8rem;
+  align-items: center;
+  border-radius: var(--border-radius-big);
+  border: none;
+  color: white;
+  margin: 0;
+}
+
+.filled {
+  background-color: var(--primary-color);
+}
+.outlined {
+  background-color: white;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+}

@@ -1,0 +1,22 @@
+.equal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.4rem;
+  font-size: 1.3rem;
+}
+
+.currencyTo {
+  display: flex;
+  /* background-color: var(--neutral-color); */
+}
+
+.main {
+  background-color: white;
+}
+
+@media (max-width: 1200px) {
+  .equal {
+    display: none;
+  }
+}

@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-items: flex-start;
+  align-items: flex-end;
+  /* gap: var(--gap-between-form-elements); */
+}
+
+.container input {
+  margin-right: 1rem;
+  outline: none;
+  font-family: var(--font-family);
+}
+
+.container button {
+  margin-left: 1rem;
+  outline: none;
+  font-family: var(--font-family);
+}
+
+.type {
+}
+
+@media (max-width: 1200px) {
+  .type {
+    display: none;
+  }
+}

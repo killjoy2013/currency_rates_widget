@@ -1,0 +1,52 @@
+.main {
+  background-color: white;
+}
+
+.container {
+  display: grid;
+  justify-content: center;
+}
+
+.baseShadow {
+  box-shadow: 0 1rem 1rem -1rem #333;
+  /* border-bottom: 0.5rem solid #ccc; */
+}
+
+.toolbar {
+  /* position: relative; */
+  display: grid;
+  min-height: 23rem;
+  align-items: center;
+  justify-content: start;
+  min-width: 120rem;
+}
+
+.row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+  .page {
+    padding: 2rem 1rem;
+    justify-content: stretch;
+  }
+  .container {
+    display: grid;
+    justify-content: stretch;
+    padding: 2rem;
+  }
+  .toolbar {
+    display: grid;
+    justify-content: stretch;
+    align-content: start;
+    min-width: 100%;
+    padding: 3rem 0;
+    gap: var(--gap-between-form-elements);
+  }
+}

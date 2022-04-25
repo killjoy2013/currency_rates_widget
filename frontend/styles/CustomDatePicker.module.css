@@ -1,0 +1,29 @@
+.datePicker {
+  width: auto !important;
+  font-family: var(--font-family);
+}
+
+.datePicker input {
+  border-radius: var(--border-radius-big);
+  height: 3.4rem;
+  padding-left: 1rem;
+  padding-right: 2rem;
+  font-size: 1.2rem;
+  border: solid 1px var(--neutral-color);
+  width: 12rem;
+}
+
+/* .react-datepicker__tab-loop input {
+  border: solid 2px salmon !important;
+} */
+
+.container {
+  display: grid;
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 22px;
+  left: 95px;
+}

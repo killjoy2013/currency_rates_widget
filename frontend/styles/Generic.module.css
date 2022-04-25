@@ -1,0 +1,62 @@
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-between-form-elements);
+}
+
+.formElement {
+  display: grid;
+  position: relative;
+  /* margin: 0.5rem 0.5rem; */
+}
+
+.formLabel {
+  font-size: 1.3rem;
+}
+.indicator {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.5rem;
+}
+
+.approvedIcon {
+  background-color: var(--primary-color);
+}
+
+.rejectedIcon {
+  background-color: var(--secondary-color);
+}
+
+.exchangeIcon {
+  background-color: var(--exchange-color);
+}
+
+.livePriceIcon {
+  background-color: var(--live-price-color);
+}
+
+.approvedText {
+  color: var(--primary-color);
+}
+
+.rejectedText {
+  color: var(--secondary-color);
+}
+.exchange {
+  font-weight: bold;
+  color: var(--exchange-color);
+}
+
+.livePrice {
+  font-weight: bold;
+  color: var(--live-price-color);
+}
+
+@media (max-width: 1200px) {
+  .form {
+    display: grid;
+  }
+  .formElement {
+    justify-content: stretch;
+  }
+}

@@ -1,0 +1,60 @@
+.selectList {
+  display: grid;
+  z-index: 1000;
+  margin-top: 1rem;
+  position: absolute;
+  top: 4rem;
+  right: 0;
+  min-width: 20rem;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: var(--border-radius-big);
+}
+
+.selectItem {
+  display: flex;
+  justify-items: flex-start;
+  align-items: center;
+  font-size: 1.3rem;
+  padding: 1rem 1rem;
+  border-bottom: solid 1px var(--neutral-color);
+}
+
+.selectInput {
+  display: flex;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: flex-start;
+  justify-items: flex-start;
+  padding-left: 1rem;
+  min-width: 20rem;
+  height: 3.4rem;
+  border: solid 1px var(--neutral-color);
+  border-radius: var(--border-radius-big);
+  /* background-color: white; */
+  /* background-color: var(--neutral-color); */
+  cursor: pointer;
+}
+
+.selectItem:last-child {
+  border-bottom: 0;
+}
+
+.selectItem:hover {
+  background-color: var(--neutral-color);
+  cursor: pointer;
+}
+
+.arrow {
+  position: absolute;
+  right: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .selectList {
+    right: 0;
+    left: 0;
+  }
+}
