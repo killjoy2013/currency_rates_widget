@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useReactiveVar } from "@apollo/client";
 import Button from "@src/elements/Button";
 import DropDown from "@src/elements/DropDown";
 import TextInput from "@src/elements/TextInput";
 import {
   CurrencyItemType,
+  Exchange,
   PriceType,
   Status,
   Transaction,
@@ -17,6 +18,7 @@ import Image from "next/image";
 import Modal from "./Modal";
 import ExchangeModalContent from "./TransactionModalContent";
 import { currencyFromList, currencyToList } from "@src/constants";
+import { latestRatesVar } from "@src/lib/cache";
 
 export type EventType = {
   name: string;
@@ -181,30 +183,21 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
       throw new Error();
   }
 
-  //todo
+  let targetCurrency = latestRatesVar().find(
+    (f) =>
+      f.currencyFrom?.abbr == newState.currencyFrom?.abbr &&
+      f.currencyTo?.abbr == newState.currencyTo?.abbr
+  );
 
-  return newState;
-  // let rates = mockRatesActual.data.find(
-  //   (f) => f.source == newState.currencyTo?.abbr
-  // );
-
-  // if (!rates) {
-  //   return { ...newState, amountTo: 0 };
-  // } else {
-  //   let target = rates.targets.find(
-  //     (f) => f.currency == newState.currencyFrom?.abbr
-  //   );
-
-  //   if (!target) {
-  //     return newState;
-  //   } else {
-  //     let amountTo =
-  //       newState.amountFrom === ""
-  //         ? ""
-  //         : (newState.amountFrom as number) * target.rate;
-  //     return { ...newState, amountTo };
-  //   }
-  // }
+  if (targetCurrency && targetCurrency.amount2) {
+    let amountTo =
+      newState.amountFrom === ""
+        ? ""
+        : (newState.amountFrom as number) * targetCurrency.amount2;
+    return { ...newState, amountTo };
+  } else {
+    return newState;
+  }
 }
 
 const Row = ({ data }: { data: CurrencyItemType }) => (
@@ -228,6 +221,8 @@ const ExchangeForm = () => {
   const [transaction, setTransaction] = useState<Transaction>();
   const client = useApolloClient();
   const [createExchange] = useCreateExchangeMutation();
+  const latestRates = useReactiveVar(latestRatesVar);
+  const dependencyValue = latestRates[0].fakeCycleId;
 
   const createHandler = () => {
     const { amountFrom, amountTo, currencyFrom, currencyTo } = state;
@@ -236,8 +231,8 @@ const ExchangeForm = () => {
         input: {
           amount1: amountFrom as number,
           amount2: amountTo as number,
-          currencyFrom: currencyFrom.name,
-          currencyTo: currencyTo.abbr,
+          currencyFrom: currencyFrom,
+          currencyTo: currencyTo,
           type: PriceType.Exchanged,
         },
       },
@@ -252,13 +247,16 @@ const ExchangeForm = () => {
   };
 
   useEffect(() => {
+    console.log("effect initial dispatch", {
+      amountFrom: state.amountFrom as string,
+    });
     dispatch({
       payload: {
-        amountFrom: "1",
+        amountFrom: state.amountFrom.toString(),
       },
       type: ActionType.AMOUNT_FROM,
     });
-  }, []);
+  }, [dependencyValue]);
 
   return (
     <div className={genericStyles.form}>

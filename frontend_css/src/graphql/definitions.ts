@@ -4,10 +4,17 @@ const GET_EXCHANGES = gql`
   query getExchanges($input: QueryInput) {
     getExchanges(input: $input) {
       id
+      fakeCycleId
       dateTime
-      currencyFrom
+      currencyFrom {
+        name
+        abbr
+      }
       amount1
-      currencyTo
+      currencyTo {
+        name
+        abbr
+      }
       amount2
       type
     }
@@ -20,10 +27,17 @@ const CREATE_EXCHANGE = gql`
       exchange {
         id
         dateTime
-        currencyFrom
+        currencyFrom {
+          name
+          abbr
+        }
         amount1
-        currencyTo
+        currencyTo {
+          name
+          abbr
+        }
         amount2
+        dateTime
         type
       }
       status

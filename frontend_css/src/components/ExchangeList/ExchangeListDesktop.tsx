@@ -99,30 +99,32 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
           </tr>
         </thead>
         <tbody>
-          {list.map((exchange, i) => (
-            <tr key={i} className={styles.tr}>
-              <td className={styles.td}>
-                {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
-              </td>
-              <td className={styles.td}>{exchange?.currencyFrom}</td>
-              <td className={styles.td}>
-                {formatNumber(exchange?.amount1, 2)}
-              </td>
-              <td className={styles.td}>{exchange?.currencyTo}</td>
-              <td className={clsx(styles.td, styles.number)}>
-                {formatNumber(exchange?.amount2, 2)}
-              </td>
-              <td
-                className={clsx(
-                  styles.td,
-                  exchange?.type == PriceType.Exchanged && styles.exchanged,
-                  exchange?.type == PriceType.LivePrice && styles.livePrice
-                )}
-              >
-                {exchange?.type}
-              </td>
-            </tr>
-          ))}
+          {list
+            .slice(0, parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string))
+            .map((exchange, i) => (
+              <tr key={i} className={styles.tr}>
+                <td className={styles.td}>
+                  {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
+                </td>
+                <td className={styles.td}>{exchange?.currencyFrom?.abbr}</td>
+                <td className={styles.td}>
+                  {formatNumber(exchange?.amount1, 2)}
+                </td>
+                <td className={styles.td}>{exchange?.currencyTo?.name}</td>
+                <td className={clsx(styles.td, styles.number)}>
+                  {formatNumber(exchange?.amount2, 2)}
+                </td>
+                <td
+                  className={clsx(
+                    styles.td,
+                    exchange?.type == PriceType.Exchanged && styles.exchanged,
+                    exchange?.type == PriceType.LivePrice && styles.livePrice
+                  )}
+                >
+                  {exchange?.type}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <Pagination

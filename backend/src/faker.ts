@@ -5,6 +5,7 @@ import { SocketRepository } from "./socket_repository";
 import {
   CoinApiResponse,
   CreateExchangeType,
+  Currency,
   Exchange,
   PriceType,
 } from "./types";
@@ -14,29 +15,54 @@ export class Faker {
     method: "GET",
     hostname: "rest.coinapi.io",
     path: "/v1/exchangerate/",
-    // headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
-    headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
+    headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
+    //headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
   };
 
-  static FROM_CURRENCIES;
-  static TO_CURRENCIES;
+  static FROM_CURRENCIES = [
+    {
+      abbr: "BTC",
+      name: "Bitcoin",
+    },
+    {
+      abbr: "ETH",
+      name: "Ethereum",
+    },
+    {
+      abbr: "XRP",
+      name: "Ripple",
+    },
+    {
+      abbr: "LTC",
+      name: "Litcoin",
+    },
+  ];
+
+  static TO_CURRENCIES = [
+    {
+      abbr: "EUR",
+      name: "Euro",
+    },
+    {
+      abbr: "USD",
+      name: "American Dollar",
+    },
+    {
+      abbr: "GBP",
+      name: "Pound sterling",
+    },
+    {
+      abbr: "CAD",
+      name: "Canadian Dollar",
+    },
+  ];
   static FAKER_INTERVAL_MIN;
 
   static {
     dotenv.config();
-    this.FROM_CURRENCIES = process.env.FROM_CURRENCIES?.split(
-      ","
-    ) as Array<string>;
-    this.TO_CURRENCIES = process.env.TO_CURRENCIES?.split(",") as Array<string>;
     this.FAKER_INTERVAL_MIN = parseInt(
       process.env.FAKER_INTERVAL_MIN as string
     );
-
-    console.log({
-      FROM_CURRENCIES: this.FROM_CURRENCIES,
-      TO_CURRENCIES: this.TO_CURRENCIES,
-      FAKER_INTERVAL_MIN: this.FAKER_INTERVAL_MIN,
-    });
   }
 
   public static startFake = async () => {
@@ -50,11 +76,14 @@ export class Faker {
     let bigList: CreateExchangeType[] = [];
 
     for (let fromCurrency of Object.values(Faker.FROM_CURRENCIES)) {
-      let coinApiResponse = await Faker.getFakeDataFromApi(fromCurrency);
+      let coinApiResponse = await Faker.getFakeDataFromApi(fromCurrency.abbr);
 
       bigList = [
         ...bigList,
-        ...Faker.createExchangeListToInsert(coinApiResponse, fromCurrency),
+        ...(await Faker.createExchangeListToInsert(
+          coinApiResponse,
+          fromCurrency
+        )),
       ];
     }
 
@@ -86,23 +115,30 @@ export class Faker {
     });
   };
 
-  static createExchangeListToInsert = (
+  static createExchangeListToInsert = async (
     coinApiResponse: CoinApiResponse,
-    fromCurrency: string
+    currencyFrom: Currency
   ) => {
     let result: CreateExchangeType[] = [];
+    let newMaxId = await this.getMaxFakeCycleId();
 
     Faker.TO_CURRENCIES.forEach((toCurrency) => {
       let rateItem = coinApiResponse.rates.find(
-        (f) => f.asset_id_quote == toCurrency
+        (f) => f.asset_id_quote == toCurrency.abbr
       );
+
+      let currencyTo: Currency = this.TO_CURRENCIES.find(
+        (f) => f.abbr == (rateItem?.asset_id_quote as string)
+      ) as Currency;
+
       try {
         result.push(
-          new ExchangeModel({
+          new ExchangeModel<CreateExchangeType>({
+            fakeCycleId: newMaxId,
             amount1: 1,
             amount2: rateItem?.rate as number,
-            currencyFrom: fromCurrency,
-            currencyTo: rateItem?.asset_id_quote as string,
+            currencyFrom,
+            currencyTo,
             dateTime: new Date(rateItem?.time as string),
             type: PriceType.LivePrice,
           })
@@ -115,8 +151,20 @@ export class Faker {
     return result;
   };
 
+  static getMaxFakeCycleId = async () => {
+    let latestFakedDoc = await ExchangeModel.find({ type: PriceType.LivePrice })
+      .sort({ dateTime: -1 })
+      .limit(1);
+
+    console.log({ latestFakedDoc });
+
+    return isNaN(latestFakedDoc[0].fakeCycleId)
+      ? 1
+      : latestFakedDoc[0].fakeCycleId + 1;
+  };
+
   static insertAndEmit = async (itemsToInsert: any[]) => {
-    console.log("before", itemsToInsert);
+    //console.log("before", itemsToInsert);
 
     await ExchangeModel.create(itemsToInsert);
 
@@ -125,7 +173,7 @@ export class Faker {
       id: m._doc._id,
     }));
 
-    console.log("after", convertedItems);
+    //console.log("after", convertedItems);
 
     SocketRepository.emitMessage(convertedItems);
   };

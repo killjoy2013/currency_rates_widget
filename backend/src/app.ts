@@ -50,7 +50,7 @@ async function startServer() {
 
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN as string,
     },
   });
 

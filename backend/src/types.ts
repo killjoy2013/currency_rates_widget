@@ -9,12 +9,18 @@ export enum Status {
   Rejected = "Rejected",
 }
 
+export type Currency = {
+  name: string;
+  abbr: string;
+};
+
 export type Exchange = {
   id: string;
+  fakeCycleId: number;
   dateTime: Date;
-  currencyFrom: string;
+  currencyFrom: Currency;
   amount1: number;
-  currencyTo: string;
+  currencyTo: Currency;
   amount2: number;
   type: PriceType;
 };

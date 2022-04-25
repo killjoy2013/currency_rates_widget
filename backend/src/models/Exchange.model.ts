@@ -1,13 +1,19 @@
 import mongoose, { Schema as MongooseSchema } from "mongoose";
+import { Currency, Exchange } from "../types";
+import CurrencySchema from "./Currency.schema";
 
-const ExchangeSchema = new mongoose.Schema(
+const ExchangeSchema = new MongooseSchema<Exchange>(
   {
+    fakeCycleId: {
+      type: MongooseSchema.Types.Number,
+      required: false,
+    },
     dateTime: {
       type: MongooseSchema.Types.Date,
       required: true,
     },
     currencyFrom: {
-      type: MongooseSchema.Types.String,
+      type: CurrencySchema,
       required: true,
     },
     amount1: {
@@ -15,7 +21,7 @@ const ExchangeSchema = new mongoose.Schema(
       required: true,
     },
     currencyTo: {
-      type: MongooseSchema.Types.String,
+      type: CurrencySchema,
       required: true,
     },
     amount2: {
@@ -28,10 +34,11 @@ const ExchangeSchema = new mongoose.Schema(
     },
   },
   {
-    _id: true,
-    id: true,
+    // _id: true,
+    // id: true,
   }
 );
 
 const ExchangeModel = mongoose.model("exchange", ExchangeSchema);
+
 export default ExchangeModel;

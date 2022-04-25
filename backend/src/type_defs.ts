@@ -14,12 +14,18 @@ const typeDefs = gql`
     Rejected
   }
 
+  type Currency {
+    name: String!
+    abbr: String!
+  }
+
   type Exchange {
     id: ID
+    fakeCycleId: Int
     dateTime: Date
-    currencyFrom: String
+    currencyFrom: Currency
     amount1: Float
-    currencyTo: String
+    currencyTo: Currency
     amount2: Float
     type: PriceType
   }
@@ -37,10 +43,15 @@ const typeDefs = gql`
     createExchange(input: CreateInput!): Transaction!
   }
 
+  input CurrencyInput {
+    name: String!
+    abbr: String!
+  }
+
   input CreateInput {
-    currencyFrom: String!
+    currencyFrom: CurrencyInput!
     amount1: Float!
-    currencyTo: String!
+    currencyTo: CurrencyInput!
     amount2: Float!
     type: PriceType!
   }

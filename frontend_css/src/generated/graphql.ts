@@ -22,9 +22,20 @@ export type Scalars = {
 export type CreateInput = {
   amount1: Scalars['Float'];
   amount2: Scalars['Float'];
-  currencyFrom: Scalars['String'];
-  currencyTo: Scalars['String'];
+  currencyFrom: CurrencyInput;
+  currencyTo: CurrencyInput;
   type: PriceType;
+};
+
+export type Currency = {
+  __typename?: 'Currency';
+  abbr: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type CurrencyInput = {
+  abbr: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type CurrencyItemType = {
@@ -37,9 +48,10 @@ export type Exchange = {
   __typename?: 'Exchange';
   amount1?: Maybe<Scalars['Float']>;
   amount2?: Maybe<Scalars['Float']>;
-  currencyFrom?: Maybe<Scalars['String']>;
-  currencyTo?: Maybe<Scalars['String']>;
+  currencyFrom?: Maybe<Currency>;
+  currencyTo?: Maybe<Currency>;
   dateTime?: Maybe<Scalars['Date']>;
+  fakeCycleId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['ID']>;
   type?: Maybe<PriceType>;
 };
@@ -93,24 +105,31 @@ export type GetExchangesQueryVariables = Exact<{
 }>;
 
 
-export type GetExchangesQuery = { __typename?: 'Query', getExchanges: Array<{ __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null }> };
+export type GetExchangesQuery = { __typename?: 'Query', getExchanges: Array<{ __typename?: 'Exchange', id?: string | null, fakeCycleId?: number | null, dateTime?: any | null, amount1?: number | null, amount2?: number | null, type?: PriceType | null, currencyFrom?: { __typename?: 'Currency', name: string, abbr: string } | null, currencyTo?: { __typename?: 'Currency', name: string, abbr: string } | null }> };
 
 export type CreateExchangeMutationVariables = Exact<{
   input: CreateInput;
 }>;
 
 
-export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status: Status, exchange: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, currencyFrom?: string | null, amount1?: number | null, currencyTo?: string | null, amount2?: number | null, type?: PriceType | null } } };
+export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: { __typename?: 'Transaction', status: Status, exchange: { __typename?: 'Exchange', id?: string | null, dateTime?: any | null, amount1?: number | null, amount2?: number | null, type?: PriceType | null, currencyFrom?: { __typename?: 'Currency', name: string, abbr: string } | null, currencyTo?: { __typename?: 'Currency', name: string, abbr: string } | null } } };
 
 
 export const GetExchangesDocument = gql`
     query getExchanges($input: QueryInput) {
   getExchanges(input: $input) {
     id
+    fakeCycleId
     dateTime
-    currencyFrom
+    currencyFrom {
+      name
+      abbr
+    }
     amount1
-    currencyTo
+    currencyTo {
+      name
+      abbr
+    }
     amount2
     type
   }
@@ -150,10 +169,17 @@ export const CreateExchangeDocument = gql`
     exchange {
       id
       dateTime
-      currencyFrom
+      currencyFrom {
+        name
+        abbr
+      }
       amount1
-      currencyTo
+      currencyTo {
+        name
+        abbr
+      }
       amount2
+      dateTime
       type
     }
     status
@@ -257,6 +283,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateInput: CreateInput;
+  Currency: ResolverTypeWrapper<Currency>;
+  CurrencyInput: CurrencyInput;
   CurrencyItemType: ResolverTypeWrapper<CurrencyItemType>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Exchange: ResolverTypeWrapper<Exchange>;
@@ -276,6 +304,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   CreateInput: CreateInput;
+  Currency: Currency;
+  CurrencyInput: CurrencyInput;
   CurrencyItemType: CurrencyItemType;
   Date: Scalars['Date'];
   Exchange: Exchange;
@@ -287,6 +317,12 @@ export type ResolversParentTypes = {
   QueryInput: QueryInput;
   String: Scalars['String'];
   Transaction: Transaction;
+};
+
+export type CurrencyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = {
+  abbr?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CurrencyItemTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrencyItemType'] = ResolversParentTypes['CurrencyItemType']> = {
@@ -302,9 +338,10 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type ExchangeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Exchange'] = ResolversParentTypes['Exchange']> = {
   amount1?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   amount2?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  currencyFrom?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  currencyTo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currencyFrom?: Resolver<Maybe<ResolversTypes['Currency']>, ParentType, ContextType>;
+  currencyTo?: Resolver<Maybe<ResolversTypes['Currency']>, ParentType, ContextType>;
   dateTime?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  fakeCycleId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['PriceType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -325,6 +362,7 @@ export type TransactionResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type Resolvers<ContextType = any> = {
+  Currency?: CurrencyResolvers<ContextType>;
   CurrencyItemType?: CurrencyItemTypeResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Exchange?: ExchangeResolvers<ContextType>;

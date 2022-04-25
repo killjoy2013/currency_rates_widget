@@ -8,11 +8,11 @@ import {
 import { Queries } from "@src/graphql/definitions";
 import { io, Socket } from "socket.io-client";
 import { FAKE_EXCHANGE_CREATED } from "@src/constants";
+import { latestRatesVar } from "@src/lib/cache";
 
 interface IHandlerContext {
   addExchangeToCache: (exchanges: Array<Exchange>) => void;
   sortList: (field: keyof Exchange, sortAsc: boolean) => void;
-  // getLatestRates: () => void;
 }
 
 const defaultState = {
@@ -28,9 +28,7 @@ interface IHandlerProvider {
 
 const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
   const client = useApolloClient();
-
   const socketRef = useRef<Socket>();
-
   useEffect(() => {
     console.log({
       NEXT_PUBLIC_WEBSOCKET_SERVER_URL:
@@ -69,16 +67,19 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       variables: {}, //todo
     }) as GetExchangesQuery;
 
+    let newExchanges = [...exchanges, ...originalData];
+
     client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
       query: Queries.GET_EXCHANGES,
       data: {
-        getExchanges: [...exchanges, ...originalData].slice(
-          0,
-          parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string)
-        ),
+        getExchanges: newExchanges,
       },
       variables: {},
     });
+
+    console.log({ exchanges });
+
+    latestRatesVar(exchanges);
   };
 
   const sortList = (field: keyof Exchange, sortAsc: boolean) => {
