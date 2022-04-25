@@ -32,11 +32,6 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
   const client = useApolloClient();
   const socketRef = useRef<Socket>();
   useEffect(() => {
-    console.log({
-      NEXT_PUBLIC_WEBSOCKET_SERVER_URL:
-        process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL,
-    });
-
     if (!socketRef.current) {
       socketRef.current = io(
         process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL as string,
@@ -54,7 +49,6 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       });
 
       socketRef.current.on(FAKE_EXCHANGE_CREATED, ({ exchanges }) => {
-        console.log(exchanges);
         addExchangeToCache(exchanges);
       });
     }
@@ -69,8 +63,6 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       variables: {}, //todo
     }) as GetExchangesQuery;
 
-    console.log({ originalData });
-
     let newExchanges = [...exchanges, ...originalData];
 
     client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
@@ -80,8 +72,6 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       },
       variables: {},
     });
-
-    console.log({ exchanges });
 
     latestRatesVar(exchanges);
   };

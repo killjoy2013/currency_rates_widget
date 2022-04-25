@@ -3,7 +3,7 @@ import ExchangeForm from "@src/components/ExchangeForm";
 import ExchangeList from "@src/components/ExchangeList";
 import { Queries } from "@src/graphql/definitions";
 import { initializeApollo } from "@src/lib/apolloClient";
-import styles from "@styles/Widget.module.css";
+import styles from "@styles/Home.module.css";
 import clsx from "clsx";
 import { GetServerSideProps } from "next";
 import { HandlerProvider } from "@src/contexts/HandlerContext";

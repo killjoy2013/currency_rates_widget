@@ -118,7 +118,7 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
                 <td
                   className={clsx(
                     styles.td,
-                    exchange?.type == PriceType.Exchanged && styles.exchanged,
+                    exchange?.type == PriceType.Exchanged && styles.exchange,
                     exchange?.type == PriceType.LivePrice && styles.livePrice
                   )}
                 >

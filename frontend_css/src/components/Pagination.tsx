@@ -49,8 +49,6 @@ const Pagination: React.FunctionComponent<PaginationProp> = ({
 }) => {
   const [activePage, setActivePage] = useState(1);
 
-  console.log({ activePage });
-
   const Next = useCallback(() => {
     return (
       <div

@@ -47,7 +47,6 @@ const resolvers = {
         return result;
       } else {
         let result = await ExchangeModel.find().sort(sorter).limit(pageSize);
-        console.log({ result });
         return result;
       }
     },

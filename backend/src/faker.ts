@@ -67,7 +67,6 @@ export class Faker {
 
   public static startFake = async () => {
     setInterval(async () => {
-      console.log("gooooo");
       await Faker.fakerJob();
     }, Faker.FAKER_INTERVAL_MIN * 60 * 1000);
   };
@@ -156,9 +155,7 @@ export class Faker {
       .sort({ dateTime: -1 })
       .limit(1);
 
-    console.log({ latestFakedDoc });
-
-    return isNaN(latestFakedDoc[0].fakeCycleId)
+    return !latestFakedDoc[0] || isNaN(latestFakedDoc[0].fakeCycleId)
       ? 1
       : latestFakedDoc[0].fakeCycleId + 1;
   };

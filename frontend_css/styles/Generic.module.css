@@ -27,12 +27,29 @@
   background-color: var(--secondary-color);
 }
 
+.exchangeIcon {
+  background-color: var(--exchange-color);
+}
+
+.livePriceIcon {
+  background-color: var(--live-price-color);
+}
+
 .approvedText {
   color: var(--primary-color);
 }
 
 .rejectedText {
   color: var(--secondary-color);
+}
+.exchange {
+  font-weight: bold;
+  color: var(--exchange-color);
+}
+
+.livePrice {
+  font-weight: bold;
+  color: var(--live-price-color);
 }
 
 @media (max-width: 1200px) {

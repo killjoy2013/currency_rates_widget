@@ -19,7 +19,6 @@ const Button: FunctionComponent<ButtonProps> = ({
     <button
       className={clsx(
         styles.button,
-        styles.formElement,
         variant == "filled" && styles.filled,
         variant == "outlined" && styles.outlined,
         className

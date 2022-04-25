@@ -1,7 +1,7 @@
 import React from "react";
 import { useGetExchangesQuery } from "@src/generated/graphql";
 import RateListDesktop from "./ExchangeListDesktop";
-import RateListMobile from "./RateListMobile";
+import RateListMobile from "./ExchangeListMobile";
 
 const ExchangeList = () => {
   const { data, error, loading } = useGetExchangesQuery();

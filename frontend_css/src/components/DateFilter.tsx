@@ -94,11 +94,7 @@ const DateFilter = () => {
           filterFormDataVar({ ...filterFormDataVar(), type: type })
         }
       />
-      <Button
-        label="Filter"
-        variant="outlined"
-        onClick={() => queryHandler()}
-      />
+      <Button label="Filter" variant="outlined" onClick={queryHandler} />
     </div>
   );
 };

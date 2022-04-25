@@ -226,7 +226,7 @@ const ExchangeForm = () => {
 
   const createHandler = () => {
     const { amountFrom, amountTo, currencyFrom, currencyTo } = state;
-    const onTransactionCompleted = createExchange({
+    createExchange({
       variables: {
         input: {
           amount1: amountFrom as number,
@@ -247,9 +247,6 @@ const ExchangeForm = () => {
   };
 
   useEffect(() => {
-    console.log("effect initial dispatch", {
-      amountFrom: state.amountFrom as string,
-    });
     dispatch({
       payload: {
         amountFrom: state.amountFrom.toString(),
