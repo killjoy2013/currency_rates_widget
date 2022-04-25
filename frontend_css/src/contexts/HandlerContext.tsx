@@ -49,6 +49,7 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
       });
 
       socketRef.current.on(FAKE_EXCHANGE_CREATED, ({ exchanges }) => {
+        console.log({ exchanges });
         addExchangeToCache(exchanges);
       });
     }

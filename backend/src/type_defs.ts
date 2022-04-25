@@ -1,5 +1,9 @@
 import { gql } from "apollo-server-express";
 
+/*
+This is where we create our GraphQL schema in schema first (SDL first) fashion
+*/
+
 const typeDefs = gql`
   scalar Date
 

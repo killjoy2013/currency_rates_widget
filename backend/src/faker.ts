@@ -11,12 +11,16 @@ import {
 } from "./types";
 
 export class Faker {
-  static options = {
+  // static options = {
+  //   method: "GET",
+  //   hostname: "rest.coinapi.io",
+  //   path: "/v1/exchangerate/",
+  //   headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
+  //   //headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
+  // };
+
+  static options: any = {
     method: "GET",
-    hostname: "rest.coinapi.io",
-    path: "/v1/exchangerate/",
-    headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
-    //headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
   };
 
   static FROM_CURRENCIES = [
@@ -63,11 +67,25 @@ export class Faker {
     this.FAKER_INTERVAL_MIN = parseInt(
       process.env.FAKER_INTERVAL_MIN as string
     );
+
+    this.options = {
+      ...this.options,
+      hostname: process.env.COIN_API_HOSTNAME,
+      path: process.env.COIN_API_PATH,
+      headers: { "X-CoinAPI-Key": process.env.COIN_API_KEY },
+    };
+
+    console.log({ options: this.options });
   }
 
   public static startFake = async () => {
-    setInterval(async () => {
-      await Faker.fakerJob();
+    let intervalId = setInterval(async () => {
+      try {
+        await Faker.fakerJob();
+      } catch (error) {
+        clearInterval(intervalId);
+        console.log("interval cleared");
+      }
     }, Faker.FAKER_INTERVAL_MIN * 60 * 1000);
   };
 
@@ -76,6 +94,11 @@ export class Faker {
 
     for (let fromCurrency of Object.values(Faker.FROM_CURRENCIES)) {
       let coinApiResponse = await Faker.getFakeDataFromApi(fromCurrency.abbr);
+
+      if (coinApiResponse.error) {
+        console.error(coinApiResponse.error);
+        throw new Error(coinApiResponse.error);
+      }
 
       bigList = [
         ...bigList,
@@ -154,24 +177,21 @@ export class Faker {
     let latestFakedDoc = await ExchangeModel.find({ type: PriceType.LivePrice })
       .sort({ dateTime: -1 })
       .limit(1);
-
-    return !latestFakedDoc[0] || isNaN(latestFakedDoc[0].fakeCycleId)
-      ? 1
-      : latestFakedDoc[0].fakeCycleId + 1;
+    return latestFakedDoc[0].fakeCycleId + 1;
   };
 
   static insertAndEmit = async (itemsToInsert: any[]) => {
-    //console.log("before", itemsToInsert);
-
     await ExchangeModel.create(itemsToInsert);
 
+    /*
+    I know it's quite a hack, however I need to decorate the created documents with id.
+    I just add id field from built-in _id
+    */
     let convertedItems = itemsToInsert.map((m: any) => ({
       ...m._doc,
       id: m._doc._id,
     }));
-
-    //console.log("after", convertedItems);
-
     SocketRepository.emitMessage(convertedItems);
+    console.log("exchange data emitted");
   };
 }
