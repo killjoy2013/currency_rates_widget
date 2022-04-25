@@ -7,10 +7,12 @@ import {
 } from "@src/generated/graphql";
 import { Queries } from "@src/graphql/definitions";
 import { io, Socket } from "socket.io-client";
+import { FAKE_EXCHANGE_CREATED } from "@src/constants";
 
 interface IHandlerContext {
   addExchangeToCache: (exchanges: Array<Exchange>) => void;
   sortList: (field: keyof Exchange, sortAsc: boolean) => void;
+  // getLatestRates: () => void;
 }
 
 const defaultState = {
@@ -30,10 +32,18 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
   const socketRef = useRef<Socket>();
 
   useEffect(() => {
+    console.log({
+      NEXT_PUBLIC_WEBSOCKET_SERVER_URL:
+        process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL,
+    });
+
     if (!socketRef.current) {
-      socketRef.current = io("http://localhost:4000", {
-        reconnection: true,
-      });
+      socketRef.current = io(
+        process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL as string,
+        {
+          reconnection: true,
+        }
+      );
 
       socketRef.current.on("connect", () => {
         console.log("a user connected");
@@ -43,7 +53,7 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
         console.log("disconnected");
       });
 
-      socketRef.current.on("FAKE_EXCHANGE_CREATED", ({ exchanges }) => {
+      socketRef.current.on(FAKE_EXCHANGE_CREATED, ({ exchanges }) => {
         console.log(exchanges);
         addExchangeToCache(exchanges);
       });
@@ -62,7 +72,10 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
     client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
       query: Queries.GET_EXCHANGES,
       data: {
-        getExchanges: [...exchanges, ...originalData],
+        getExchanges: [...exchanges, ...originalData].slice(
+          0,
+          parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string)
+        ),
       },
       variables: {},
     });

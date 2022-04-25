@@ -2,6 +2,7 @@ schema: http://localhost:4000/graphql
 documents: "./src/graphql/definitions.ts"
 generates:
   ./src/generated/graphql.ts:
+    schema: client-schema.graphql
     plugins:
       - add:
           content: "/* eslint-disable */"
@@ -15,25 +16,3 @@ generates:
       withComponent: false
       namingConvention:
         enumValues: "keep"
-# schema: http://localhost:4000/graphql
-# documents:
-#   - ./src/graphql/definitions.ts
-# overwrite: true
-# generates:
-#   ./src/graphql/types.tsx:
-#     plugins:
-#       - add:
-#           content: "/* eslint-disable */"
-#       - typescript
-#       - typescript-operations
-#       - typescript-react-apollo
-#       - typescript-resolvers
-#     # The combined options of all provided plug-ins
-#     # More information about the options below:
-#     # graphql-code-generator.com/docs/plugins/typescript-react-apollo#configuration
-#     config:
-#       withHOC: false
-#       withHooks: true
-#       withComponent: false
-#       namingConvention:
-#         enumValues: keep

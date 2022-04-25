@@ -27,6 +27,12 @@ export type CreateInput = {
   type: PriceType;
 };
 
+export type CurrencyItemType = {
+  __typename?: 'CurrencyItemType';
+  abbr: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type Exchange = {
   __typename?: 'Exchange';
   amount1?: Maybe<Scalars['Float']>;
@@ -251,6 +257,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateInput: CreateInput;
+  CurrencyItemType: ResolverTypeWrapper<CurrencyItemType>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Exchange: ResolverTypeWrapper<Exchange>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -269,6 +276,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   CreateInput: CreateInput;
+  CurrencyItemType: CurrencyItemType;
   Date: Scalars['Date'];
   Exchange: Exchange;
   Float: Scalars['Float'];
@@ -279,6 +287,12 @@ export type ResolversParentTypes = {
   QueryInput: QueryInput;
   String: Scalars['String'];
   Transaction: Transaction;
+};
+
+export type CurrencyItemTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrencyItemType'] = ResolversParentTypes['CurrencyItemType']> = {
+  abbr?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -311,6 +325,7 @@ export type TransactionResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type Resolvers<ContextType = any> = {
+  CurrencyItemType?: CurrencyItemTypeResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Exchange?: ExchangeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { FAKE_EXCHANGE_CREATED } from "./constants";
 import { CreateExchangeType } from "./types";
 
 export class SocketRepository {
@@ -8,22 +9,9 @@ export class SocketRepository {
   public static setIo = (io: Server) => {
     SocketRepository.io = io;
     SocketRepository.io.on("connection", (socket: Socket) => {
-      let eventDate = new Date();
-
-      console.log(
-        `SOCKET CONNECTION socket.id:${socket.id}, transport:${
-          socket.handshake.query?.transport
-        } on ${eventDate.toLocaleDateString()} ${eventDate.toLocaleTimeString()}`
-      );
       SocketRepository.addSocket(socket);
 
       socket.on("disconnect", async () => {
-        let eventDate = new Date();
-        console.log(
-          `SOCKET DISCONNECT socket.id:${socket.id}, transport:${
-            socket.handshake.query?.transport
-          } on ${eventDate.toLocaleDateString()} ${eventDate.toLocaleTimeString()}`
-        );
         SocketRepository.removeSocket(socket);
       });
     });
@@ -41,7 +29,7 @@ export class SocketRepository {
 
   public static emitMessage = (exchanges: CreateExchangeType[]) => {
     SocketRepository.sockets.forEach((socket) => {
-      socket.emit("FAKE_EXCHANGE_CREATED", { exchanges });
+      socket.emit(FAKE_EXCHANGE_CREATED, { exchanges });
     });
   };
 }

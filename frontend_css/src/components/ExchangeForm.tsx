@@ -1,9 +1,10 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import Button from "@src/elements/Button";
 import DropDown from "@src/elements/DropDown";
 import TextInput from "@src/elements/TextInput";
 import {
+  CurrencyItemType,
   PriceType,
   Status,
   Transaction,
@@ -15,144 +16,102 @@ import genericStyles from "@styles/Generic.module.css";
 import Image from "next/image";
 import Modal from "./Modal";
 import ExchangeModalContent from "./TransactionModalContent";
+import { currencyFromList, currencyToList } from "@src/constants";
 
 export type EventType = {
   name: string;
   value: number;
 };
 
-export type CurrencyItemType = {
-  abbr: string;
-  name: string;
-};
-
-export const currencyFromList: CurrencyItemType[] = [
-  {
-    abbr: "BTC",
-    name: "Bitcoin",
-  },
-  {
-    abbr: "ETH",
-    name: "Ethereum",
-  },
-  {
-    abbr: "XRP",
-    name: "Ripple",
-  },
-  {
-    abbr: "LTC",
-    name: "Litcoin",
-  },
-];
-
-export const currencyToList: CurrencyItemType[] = [
-  {
-    abbr: "EUR",
-    name: "Euro",
-  },
-  {
-    abbr: "USD",
-    name: "American Dollar",
-  },
-  {
-    abbr: "GBP",
-    name: "Pound sterling",
-  },
-  {
-    abbr: "CAD",
-    name: "Canadian Dollar",
-  },
-];
-
-let mockRatesActual = {
-  timestamp: "555555555",
-  data: [
-    {
-      source: "USD",
-      targets: [
-        {
-          currency: "BTC",
-          rate: 4500,
-        },
-        {
-          currency: "ETH",
-          rate: 123,
-        },
-        {
-          currency: "XRP",
-          rate: 234,
-        },
-        {
-          currency: "LTC",
-          rate: 1277,
-        },
-      ],
-    },
-    {
-      source: "EUR",
-      targets: [
-        {
-          currency: "BTC",
-          rate: 3500,
-        },
-        {
-          currency: "ETH",
-          rate: 100,
-        },
-        {
-          currency: "XRP",
-          rate: 220,
-        },
-        {
-          currency: "LTC",
-          rate: 3931,
-        },
-      ],
-    },
-    {
-      source: "GBP",
-      targets: [
-        {
-          currency: "BTC",
-          rate: 2500,
-        },
-        {
-          currency: "ETH",
-          rate: 1300,
-        },
-        {
-          currency: "XRP",
-          rate: 1220,
-        },
-        {
-          currency: "LTC",
-          rate: 931,
-        },
-      ],
-    },
-    {
-      source: "CAD",
-      targets: [
-        {
-          currency: "BTC",
-          rate: 4399,
-        },
-        {
-          currency: "ETH",
-          rate: 3400,
-        },
-        {
-          currency: "XRP",
-          rate: 7820,
-        },
-        {
-          currency: "LTC",
-          rate: 8800,
-        },
-      ],
-    },
-  ],
-};
+// let mockRatesActual = {
+//   timestamp: "555555555",
+//   data: [
+//     {
+//       source: "USD",
+//       targets: [
+//         {
+//           currency: "BTC",
+//           rate: 4500,
+//         },
+//         {
+//           currency: "ETH",
+//           rate: 123,
+//         },
+//         {
+//           currency: "XRP",
+//           rate: 234,
+//         },
+//         {
+//           currency: "LTC",
+//           rate: 1277,
+//         },
+//       ],
+//     },
+//     {
+//       source: "EUR",
+//       targets: [
+//         {
+//           currency: "BTC",
+//           rate: 3500,
+//         },
+//         {
+//           currency: "ETH",
+//           rate: 100,
+//         },
+//         {
+//           currency: "XRP",
+//           rate: 220,
+//         },
+//         {
+//           currency: "LTC",
+//           rate: 3931,
+//         },
+//       ],
+//     },
+//     {
+//       source: "GBP",
+//       targets: [
+//         {
+//           currency: "BTC",
+//           rate: 2500,
+//         },
+//         {
+//           currency: "ETH",
+//           rate: 1300,
+//         },
+//         {
+//           currency: "XRP",
+//           rate: 1220,
+//         },
+//         {
+//           currency: "LTC",
+//           rate: 931,
+//         },
+//       ],
+//     },
+//     {
+//       source: "CAD",
+//       targets: [
+//         {
+//           currency: "BTC",
+//           rate: 4399,
+//         },
+//         {
+//           currency: "ETH",
+//           rate: 3400,
+//         },
+//         {
+//           currency: "XRP",
+//           rate: 7820,
+//         },
+//         {
+//           currency: "LTC",
+//           rate: 8800,
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 export type FormState = {
   currencyFrom: CurrencyItemType;
@@ -222,27 +181,30 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
       throw new Error();
   }
 
-  let rates = mockRatesActual.data.find(
-    (f) => f.source == newState.currencyTo?.abbr
-  );
+  //todo
 
-  if (!rates) {
-    return { ...newState, amountTo: 0 };
-  } else {
-    let target = rates.targets.find(
-      (f) => f.currency == newState.currencyFrom?.abbr
-    );
+  return newState;
+  // let rates = mockRatesActual.data.find(
+  //   (f) => f.source == newState.currencyTo?.abbr
+  // );
 
-    if (!target) {
-      return newState;
-    } else {
-      let amountTo =
-        newState.amountFrom === ""
-          ? ""
-          : (newState.amountFrom as number) * target.rate;
-      return { ...newState, amountTo };
-    }
-  }
+  // if (!rates) {
+  //   return { ...newState, amountTo: 0 };
+  // } else {
+  //   let target = rates.targets.find(
+  //     (f) => f.currency == newState.currencyFrom?.abbr
+  //   );
+
+  //   if (!target) {
+  //     return newState;
+  //   } else {
+  //     let amountTo =
+  //       newState.amountFrom === ""
+  //         ? ""
+  //         : (newState.amountFrom as number) * target.rate;
+  //     return { ...newState, amountTo };
+  //   }
+  // }
 }
 
 const Row = ({ data }: { data: CurrencyItemType }) => (
@@ -280,8 +242,6 @@ const ExchangeForm = () => {
         },
       },
       onCompleted: ({ createExchange: transaction }) => {
-        console.log({ transaction });
-
         if (transaction.status == Status.Approved) {
           addExchangeToCache([transaction.exchange]);
         }
@@ -290,6 +250,15 @@ const ExchangeForm = () => {
       },
     });
   };
+
+  useEffect(() => {
+    dispatch({
+      payload: {
+        amountFrom: "1",
+      },
+      type: ActionType.AMOUNT_FROM,
+    });
+  }, []);
 
   return (
     <div className={genericStyles.form}>
