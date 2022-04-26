@@ -1,6 +1,11 @@
 import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
+/*
+This is form Next.js documentation.
+_document.tsx is for SSR, creates document context with Apollo Cache
+*/
+
 export default class MyDocument extends Document {
   render() {
     return (

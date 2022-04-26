@@ -1,19 +1,22 @@
-import React, { FunctionComponent } from "react";
-import moment from "moment";
+import Button from "@src/elements/Button";
+import { Exchange, Status, Transaction } from "@src/generated/graphql";
+import { getCurrencyDisplayText } from "@src/helpers/TextHelpers";
 import styles from "@styles/ExchangeModalContent.module.css";
 import genericStyles from "@styles/Generic.module.css";
-import Button from "@src/elements/Button";
-import { FormState } from "./ExchangeForm";
-import { getCurrencyDisplayText } from "@src/helpers/TextHelpers";
-import { Exchange, Status, Transaction } from "@src/generated/graphql";
 import clsx from "clsx";
+import moment from "moment";
+import React, { FC } from "react";
+
+/*
+This is the content of the modal window where we display the result of the Exchange create transaction
+*/
 
 interface ExchangeModalContentProps {
   transaction: Transaction;
   onClose: () => void;
 }
 
-const TransactionModalContent: FunctionComponent<ExchangeModalContentProps> = ({
+const TransactionModalContent: FC<ExchangeModalContentProps> = ({
   transaction,
   onClose,
 }) => {
@@ -29,6 +32,7 @@ const TransactionModalContent: FunctionComponent<ExchangeModalContentProps> = ({
         <div className={styles.totalAmount}>
           <strong>
             {getCurrencyDisplayText(
+              //creation of the currency display is encapsulated in getCurrencyDisplayText helper method
               amount2 as number,
               currencyTo?.abbr as string
             )}

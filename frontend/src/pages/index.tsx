@@ -10,6 +10,10 @@ import { HandlerProvider } from "@src/contexts/HandlerContext";
 
 const Home = () => {
   return (
+    /*Adding suspense to create error boundary.
+    Nest.js throws some UI hydration errors when inconsistent HTML found
+    page will have two main componentsi ExchangeForm, ExchangeList
+    */
     <Suspense fallback={<>Waiting...</>}>
       <HandlerProvider>
         <main className={styles.main}>
@@ -29,6 +33,12 @@ const Home = () => {
   );
 };
 
+/*
+getServerSideProps is where SSR magic hapens upon request
+we're sending initial GraphQL request, from server to server
+finally we're sending the created apollo cache to frontend in props.
+We wouldn't need to send another GraphQL post request from client when page loads. This gives us high langing performance.
+*/
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({

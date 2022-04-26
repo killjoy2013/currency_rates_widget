@@ -5,6 +5,13 @@ import styles from "@styles/DropDown.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import Modal, { RowProps } from "./DropDownModal";
 
+/*
+DropDown is an important element and used quite oftenly, but displaying differently.
+To avoid creating dublicated components, here we craeted our DropDown in a generic way using typescript generics.
+we just need to provide the data to display, and tell the DropDown how to visualize supplying Row & Selected  properties.
+They are JSX elements, so we can be craetive as much as we want to be.
+*/
+
 interface DropDownProps<T> {
   items: T[];
   Row: (props: RowProps<T>) => JSX.Element;

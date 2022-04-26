@@ -10,10 +10,19 @@ import clsx from "clsx";
 import { HandlerContext } from "@src/contexts/HandlerContext";
 import { filterFormDataVar } from "@src/lib/cache";
 
+/*
+This component will be visible only above 1200px, for desktops
+with media query in ExchangeListDesktop.module.css
+*/
+
 interface ExchangeListDesktopProps {
   list: Array<Exchange | null>;
 }
 
+/*
+Every <td> tag in the table <thead> part contains a funtionality.
+So, it's better to create a component and reuse it
+*/
 interface ITd {
   name: keyof Exchange;
   sortAsc: boolean;
@@ -37,6 +46,10 @@ const Td: React.FC<ITd> = ({ name, sorting, sortAsc, label, onClick }) => {
 const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
   list,
 }) => {
+  /*
+  we need to keep sort direction and sort field data in local state.
+  should be re-rendered when they are changed
+  */
   const [sortAsc, setSortAsc] = useState<boolean>(false);
   const [sortField, setSortField] = useState<keyof Exchange>("dateTime");
 
@@ -100,32 +113,35 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
           </tr>
         </thead>
         <tbody>
-          {list
-            .slice(0, parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string))
-            .map((exchange, i) => (
-              <tr key={i} className={styles.tr}>
-                <td className={styles.td}>
-                  {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
-                </td>
-                <td className={styles.td}>{exchange?.currencyFrom?.abbr}</td>
-                <td className={styles.td}>
-                  {formatNumber(exchange?.amount1, 2)}
-                </td>
-                <td className={styles.td}>{exchange?.currencyTo?.name}</td>
-                <td className={clsx(styles.td, styles.number)}>
-                  {formatNumber(exchange?.amount2, 2)}
-                </td>
-                <td
-                  className={clsx(
-                    styles.td,
-                    exchange?.type == PriceType.Exchanged && styles.exchange,
-                    exchange?.type == PriceType.LivePrice && styles.livePrice
-                  )}
-                >
-                  {exchange?.type}
-                </td>
-              </tr>
-            ))}
+          {
+            //rendering as many item as the pagesize
+            list
+              .slice(0, parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string))
+              .map((exchange, i) => (
+                <tr key={i} className={styles.tr}>
+                  <td className={styles.td}>
+                    {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
+                  </td>
+                  <td className={styles.td}>{exchange?.currencyFrom?.abbr}</td>
+                  <td className={styles.td}>
+                    {formatNumber(exchange?.amount1, 2)}
+                  </td>
+                  <td className={styles.td}>{exchange?.currencyTo?.name}</td>
+                  <td className={clsx(styles.td, styles.number)}>
+                    {formatNumber(exchange?.amount2, 2)}
+                  </td>
+                  <td
+                    className={clsx(
+                      styles.td,
+                      exchange?.type == PriceType.Exchanged && styles.exchange,
+                      exchange?.type == PriceType.LivePrice && styles.livePrice
+                    )}
+                  >
+                    {exchange?.type}
+                  </td>
+                </tr>
+              ))
+          }
         </tbody>
       </table>
       <Pagination totalNumber={6} onPageChange={queryHandler} />

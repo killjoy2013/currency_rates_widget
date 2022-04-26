@@ -2,8 +2,11 @@ import React, { FunctionComponent, ReactNode, useState } from "react";
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { GrClose } from "react-icons/gr";
-import styles from "../../styles/Modal.module.css";
+import styles from "@styles/Modal.module.css";
 
+/*
+This is a generic Modal component. Content to display will be provided as children
+*/
 interface ModalProps {
   show: boolean;
   onClose: () => void;

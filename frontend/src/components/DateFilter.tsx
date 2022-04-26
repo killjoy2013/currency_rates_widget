@@ -1,43 +1,26 @@
+import { useReactiveVar } from "@apollo/client";
+import { HandlerContext } from "@src/contexts/HandlerContext";
+import { PriceType } from "@src/generated/graphql";
+import { filterFormDataVar } from "@src/lib/cache";
 import React, { useContext } from "react";
-import { useApolloClient, useReactiveVar } from "@apollo/client";
-import {
-  GetExchangesQuery,
-  GetExchangesQueryVariables,
-  PriceType,
-  QueryInput,
-} from "@src/generated/graphql";
-import { Queries } from "@src/graphql/definitions";
-import { useState } from "react";
 import styles from "../../styles/DateFilter.module.css";
 import Button from "../elements/Button";
 import CustomDatePicker from "../elements/CustomDatePicker";
 import DropDown from "../elements/DropDown";
-import { filterFormDataVar } from "@src/lib/cache";
-import { HandlerContext } from "@src/contexts/HandlerContext";
+
+/*
+DateFilter will be placed inside ExchangeList component
+Basically it's a form to query data.
+It's data is maintained in apollo client cache reactive variable filterFormDataVar
+which can be accessed from everywhere inside the app.
+onChange method of each element updates filterFormDataVar in the cache
+*/
 
 const DateFilter = () => {
-  const client = useApolloClient();
+  //useReactiveVar is to trigger re render when filterFormDataVar value changes
   const filterFormData = useReactiveVar(filterFormDataVar);
+  //we're getting common functions like handlers from a page wide HandlerContext
   const { queryHandler } = useContext(HandlerContext);
-
-  // const queryHandler = async () => {
-  //   let filteredData = await client.query<
-  //     GetExchangesQuery,
-  //     GetExchangesQueryVariables
-  //   >({
-  //     query: Queries.GET_EXCHANGES,
-  //     fetchPolicy: "network-only",
-  //     variables: {
-  //       input: { ...filterFormDataVar() },
-  //     },
-  //   });
-
-  //   client.writeQuery<GetExchangesQuery, GetExchangesQueryVariables>({
-  //     query: Queries.GET_EXCHANGES,
-  //     data: filteredData.data,
-  //     variables: {}, //todo
-  //   });
-  // };
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
   const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
@@ -48,6 +31,7 @@ const DateFilter = () => {
         name="fromDate"
         value={filterFormData.fromDate}
         label="From date"
+        //we're interested in only date part. So, need to set time part to zero
         onChange={({ value }) =>
           filterFormDataVar({
             ...filterFormDataVar(),

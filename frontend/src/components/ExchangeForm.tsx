@@ -1,119 +1,34 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
 import { useApolloClient, useReactiveVar } from "@apollo/client";
+import { currencyFromList, currencyToList } from "@src/constants";
+import { HandlerContext } from "@src/contexts/HandlerContext";
 import Button from "@src/elements/Button";
 import DropDown from "@src/elements/DropDown";
 import TextInput from "@src/elements/TextInput";
 import {
   CurrencyItemType,
-  Exchange,
   PriceType,
   Status,
   Transaction,
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
-import { HandlerContext } from "@src/contexts/HandlerContext";
+import { latestRatesVar } from "@src/lib/cache";
 import styles from "@styles/ExchangeForm.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import Image from "next/image";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import Modal from "./Modal";
 import ExchangeModalContent from "./TransactionModalContent";
-import { currencyFromList, currencyToList } from "@src/constants";
-import { latestRatesVar } from "@src/lib/cache";
+
+/*
+ExchangeForm needs a rather complicated state management. 
+Not only every field update wil change the formstate, but also amount2 value will be calculated.
+Using useReducer hook makes sense here. We can implement a state update logic in reducer function
+*/
 
 export type EventType = {
   name: string;
   value: number;
 };
-
-// let mockRatesActual = {
-//   timestamp: "555555555",
-//   data: [
-//     {
-//       source: "USD",
-//       targets: [
-//         {
-//           currency: "BTC",
-//           rate: 4500,
-//         },
-//         {
-//           currency: "ETH",
-//           rate: 123,
-//         },
-//         {
-//           currency: "XRP",
-//           rate: 234,
-//         },
-//         {
-//           currency: "LTC",
-//           rate: 1277,
-//         },
-//       ],
-//     },
-//     {
-//       source: "EUR",
-//       targets: [
-//         {
-//           currency: "BTC",
-//           rate: 3500,
-//         },
-//         {
-//           currency: "ETH",
-//           rate: 100,
-//         },
-//         {
-//           currency: "XRP",
-//           rate: 220,
-//         },
-//         {
-//           currency: "LTC",
-//           rate: 3931,
-//         },
-//       ],
-//     },
-//     {
-//       source: "GBP",
-//       targets: [
-//         {
-//           currency: "BTC",
-//           rate: 2500,
-//         },
-//         {
-//           currency: "ETH",
-//           rate: 1300,
-//         },
-//         {
-//           currency: "XRP",
-//           rate: 1220,
-//         },
-//         {
-//           currency: "LTC",
-//           rate: 931,
-//         },
-//       ],
-//     },
-//     {
-//       source: "CAD",
-//       targets: [
-//         {
-//           currency: "BTC",
-//           rate: 4399,
-//         },
-//         {
-//           currency: "ETH",
-//           rate: 3400,
-//         },
-//         {
-//           currency: "XRP",
-//           rate: 7820,
-//         },
-//         {
-//           currency: "LTC",
-//           rate: 8800,
-//         },
-//       ],
-//     },
-//   ],
-// };
 
 export type FormState = {
   currencyFrom: CurrencyItemType;
@@ -128,6 +43,9 @@ export type Payload = {
   amountFrom?: string;
 };
 
+/*
+Form will be populated with BTC & USD data initially
+*/
 const initialFormState: FormState = {
   amountFrom: 1,
   amountTo: 0,
@@ -141,23 +59,30 @@ const initialFormState: FormState = {
   },
 };
 
+//predefined action types that will cange the state
 enum ActionType {
   CURRENCY_FROM = "CURRENCY_FROM",
   CURRENCY_TO = "CURRENCY_TO",
   AMOUNT_FROM = "AMOUNT_FROM",
 }
 
+//typical Action needs to have type & payload
 type Action = {
   type: ActionType;
   payload: Payload;
 };
 
+/*
+Here is the crucial part where we implement the state change logic
+Basically it gets the old state & an action then produces a new state
+*/
 function formStateReducer(oldState: FormState, action: Action): FormState {
   let newState: FormState;
   const { type, payload } = action;
 
   switch (type) {
     case ActionType.AMOUNT_FROM:
+      //we prevent non numeric value input, only numbers can be entered
       if ((payload.amountFrom as string).trim() === "") {
         newState = { ...oldState, amountFrom: "" };
       } else if (!isNaN(payload.amountFrom as any)) {
@@ -165,7 +90,6 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
       } else {
         newState = oldState;
       }
-
       break;
     case ActionType.CURRENCY_FROM:
       newState = {
@@ -183,6 +107,8 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
       throw new Error();
   }
 
+  //lateset rates which we receive over websocket are kept in apollo client cache as latestRatesVar reactive variable.
+  //we need to update amountTo data before we return the new state
   let targetCurrency = latestRatesVar().find(
     (f) =>
       f.currencyFrom?.abbr == newState.currencyFrom?.abbr &&
@@ -193,13 +119,16 @@ function formStateReducer(oldState: FormState, action: Action): FormState {
     let amountTo =
       newState.amountFrom === ""
         ? ""
-        : (newState.amountFrom as number) * targetCurrency.amount2;
+        : (newState.amountFrom as number) * targetCurrency.amount2; //now we can set amountTo value
     return { ...newState, amountTo };
   } else {
     return newState;
   }
 }
 
+//currencyFrom & currencyTo fields behaves the same way.
+//So, their DropDown component will use the same Row & Selected structure with image & text
+//Next.js provides an Image component. We use it
 const Row = ({ data }: { data: CurrencyItemType }) => (
   <>
     <Image src={`/icons/${data.abbr}.svg`} width={36} height={16} alt="" />
@@ -215,15 +144,25 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const ExchangeForm = () => {
+  //get the handler from context
   const { addExchangeToCache } = useContext(HandlerContext);
+  //create the dispatcher
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
+  //model window visibility
   const [showModal, setShowModal] = useState(false);
+  //Transaction object will be returned from manual exchange create operation. We'll use it to display modal
   const [transaction, setTransaction] = useState<Transaction>();
-  const client = useApolloClient();
+
   const [createExchange] = useCreateExchangeMutation();
+
+  //we need to trigger the rerender upon change in latestRates over websocket. So, need to use our reactive variable with useReactiveVar hook.
   const latestRates = useReactiveVar(latestRatesVar);
+
+  //fakeCycleId is the id for CoinAPI exchange rate collecion. It increments each time we collect data from api.
+  //need to use it in our useEffect dependency array to trigger the state update so that amountTo field will be changed
   const dependencyValue = latestRates[0].fakeCycleId;
 
+  //we can move this handler to HandlerContext
   const createHandler = () => {
     const { amountFrom, amountTo, currencyFrom, currencyTo } = state;
     createExchange({
@@ -247,6 +186,7 @@ const ExchangeForm = () => {
   };
 
   useEffect(() => {
+    //amountTo field will be canculated upon render
     dispatch({
       payload: {
         amountFrom: state.amountFrom.toString(),

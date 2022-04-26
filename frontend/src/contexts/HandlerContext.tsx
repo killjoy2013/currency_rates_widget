@@ -10,6 +10,11 @@ import { io, Socket } from "socket.io-client";
 import { FAKE_EXCHANGE_CREATED } from "@src/constants";
 import { filterFormDataVar, latestRatesVar } from "@src/lib/cache";
 
+/*
+Reactjs context is a wonderful place to put our functions that other components need to access.
+this way, we avoid prop drilling no metter where the component is in the component tree.
+*/
+
 interface IHandlerContext {
   addExchangeToCache: (exchanges: Array<Exchange>) => void;
   sortList: (field: keyof Exchange, sortAsc: boolean) => void;
@@ -30,6 +35,8 @@ interface IHandlerProvider {
 
 const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
   const client = useApolloClient();
+
+  //websocket setup is done here as well
   const socketRef = useRef<Socket>();
   useEffect(() => {
     if (!socketRef.current) {
