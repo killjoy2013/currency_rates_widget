@@ -47,6 +47,6 @@ I'm working on this, will push an update when solved it...
 
 I followed **element -> component ->...-> component -> page** approach. Where the atomic components are grouped as elements. Components are composed of elements or other components.
 
-You can watch my [short video](https://drive.google.com/file/d/1otp75k7MD23r3WI3_6I2MQfzJTqxj_Wp/view?usp=sharing)
+You can watch my [short video](https://drive.google.com/file/d/1nHtbFhcM_T8PLrWNZLNHzUHUoD5HZFR6/view?usp=sharing)
 
 Thank you 😎
