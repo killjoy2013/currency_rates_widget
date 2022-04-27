@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetExchangesQuery } from "@src/generated/graphql";
 import RateListDesktop from "./ExchangeListDesktop";
 import RateListMobile from "./ExchangeListMobile";
+import { filterFormDataVar, listToDisplayVar } from "@src/lib/cache";
 
 /*
 ExchangeList is a top level component which creates the table in the page
@@ -15,18 +16,27 @@ const ExchangeList = () => {
   we use this generated query hook. Much cleaner and type safe.
   Rendering of mobile or desktop version is decided with media queries
   */
-  const { data, error, loading } = useGetExchangesQuery();
+
+  console.log({
+    pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string),
+  });
+
+  const { data, error, loading } = useGetExchangesQuery({
+    variables: {
+      input: {
+        ...filterFormDataVar(),
+      },
+    },
+  });
+
+  useEffect(() => {
+    data?.getExchanges && listToDisplayVar([...data.getExchanges]);
+  }, [!!data]);
 
   return (
     <>
-      {data?.getExchanges && (
-        <>
-          <RateListDesktop list={data.getExchanges} />
-          <RateListMobile list={data.getExchanges} />
-        </>
-      )}
-      {error && <>Error :-(</>}
-      {loading && <>Loading...</>}
+      <RateListDesktop />
+      <RateListMobile />
     </>
   );
 };

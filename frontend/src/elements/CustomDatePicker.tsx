@@ -1,3 +1,4 @@
+import { removeTimePart } from "@src/helpers/DateHelpers";
 import styles from "@styles/CustomDatePicker.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import "font-awesome/css/font-awesome.min.css";
@@ -38,15 +39,7 @@ const CustomDatePicker = (props: CustomDatePickerProps) => {
       selected={value}
       onChange={(date: Date) => {
         onChange({
-          value: new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            0,
-            0,
-            0,
-            0
-          ),
+          value: removeTimePart(date),
         });
       }}
     />

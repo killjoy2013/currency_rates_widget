@@ -40,7 +40,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getExchanges(input: QueryInput): [Exchange!]!
+    getExchanges(input: QueryInput!): [Exchange!]!
   }
 
   type Mutation {
@@ -64,6 +64,8 @@ const typeDefs = gql`
     fromDate: Date
     toDate: Date
     type: PriceType
+    pageSize: Int!
+    pageNumber: Int!
   }
 `;
 

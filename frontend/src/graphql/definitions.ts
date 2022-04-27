@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 const GET_EXCHANGES = gql`
-  query getExchanges($input: QueryInput) {
+  query getExchanges($input: QueryInput!) {
     getExchanges(input: $input) {
       id
       fakeCycleId

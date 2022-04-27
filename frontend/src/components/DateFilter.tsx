@@ -1,6 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { HandlerContext } from "@src/contexts/HandlerContext";
 import { PriceType } from "@src/generated/graphql";
+import { removeTimePart } from "@src/helpers/DateHelpers";
 import { filterFormDataVar } from "@src/lib/cache";
 import React, { useContext } from "react";
 import styles from "../../styles/DateFilter.module.css";
@@ -20,7 +21,7 @@ const DateFilter = () => {
   //useReactiveVar is to trigger re render when filterFormDataVar value changes
   const filterFormData = useReactiveVar(filterFormDataVar);
   //we're getting common functions like handlers from a page wide HandlerContext
-  const { queryHandler } = useContext(HandlerContext);
+  const { queryExchange } = useContext(HandlerContext);
 
   const TypeRow = ({ data }: { data: string }) => <div>{`${data}`}</div>;
   const TypeSelect = ({ data }: { data: string }) => <div>{`${data}`}</div>;
@@ -35,15 +36,7 @@ const DateFilter = () => {
         onChange={({ value }) =>
           filterFormDataVar({
             ...filterFormDataVar(),
-            fromDate: new Date(
-              value.getFullYear(),
-              value.getMonth(),
-              value.getDate(),
-              0,
-              0,
-              0,
-              0
-            ),
+            fromDate: removeTimePart(value),
           })
         }
       />
@@ -54,15 +47,7 @@ const DateFilter = () => {
         onChange={({ value }) =>
           filterFormDataVar({
             ...filterFormDataVar(),
-            toDate: new Date(
-              value.getFullYear(),
-              value.getMonth(),
-              value.getDate(),
-              0,
-              0,
-              0,
-              0
-            ),
+            toDate: removeTimePart(value),
           })
         }
       />
@@ -78,7 +63,7 @@ const DateFilter = () => {
           filterFormDataVar({ ...filterFormDataVar(), type: type })
         }
       />
-      <Button label="Filter" variant="outlined" onClick={queryHandler} />
+      <Button label="Filter" variant="outlined" onClick={queryExchange} />
     </div>
   );
 };

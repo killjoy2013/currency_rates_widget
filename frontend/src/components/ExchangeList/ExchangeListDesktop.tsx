@@ -8,16 +8,15 @@ import moment from "moment";
 import { formatNumber } from "@src/helpers/TextHelpers";
 import clsx from "clsx";
 import { HandlerContext } from "@src/contexts/HandlerContext";
-import { filterFormDataVar } from "@src/lib/cache";
+import { filterFormDataVar, listToDisplayVar } from "@src/lib/cache";
+import { useReactiveVar } from "@apollo/client";
 
 /*
 This component will be visible only above 1200px, for desktops
 with media query in ExchangeListDesktop.module.css
 */
 
-interface ExchangeListDesktopProps {
-  list: Array<Exchange | null>;
-}
+interface ExchangeListDesktopProps {}
 
 /*
 Every <td> tag in the table <thead> part contains a funtionality.
@@ -43,22 +42,28 @@ const Td: React.FC<ITd> = ({ name, sorting, sortAsc, label, onClick }) => {
   );
 };
 
-const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
-  list,
-}) => {
+const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
+  props
+) => {
   /*
   we need to keep sort direction and sort field data in local state.
   should be re-rendered when they are changed
   */
   const [sortAsc, setSortAsc] = useState<boolean>(false);
   const [sortField, setSortField] = useState<keyof Exchange>("dateTime");
+  const listToDisplay = useReactiveVar(listToDisplayVar);
 
-  const { sortList, queryHandler } = useContext(HandlerContext);
+  const { sortList, queryExchange } = useContext(HandlerContext);
 
   const sortListHandler = (name: keyof Exchange) => {
     sortList(name, !sortAsc);
     setSortAsc((prev) => !prev);
     setSortField(name);
+  };
+
+  const queryHandler = (pageNumber: number) => {
+    filterFormDataVar({ ...filterFormDataVar(), pageNumber });
+    queryExchange();
   };
 
   return (
@@ -115,32 +120,30 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = ({
         <tbody>
           {
             //rendering as many item as the pagesize
-            list
-              .slice(0, parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string))
-              .map((exchange, i) => (
-                <tr key={i} className={styles.tr}>
-                  <td className={styles.td}>
-                    {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
-                  </td>
-                  <td className={styles.td}>{exchange?.currencyFrom?.abbr}</td>
-                  <td className={styles.td}>
-                    {formatNumber(exchange?.amount1, 2)}
-                  </td>
-                  <td className={styles.td}>{exchange?.currencyTo?.name}</td>
-                  <td className={clsx(styles.td, styles.number)}>
-                    {formatNumber(exchange?.amount2, 2)}
-                  </td>
-                  <td
-                    className={clsx(
-                      styles.td,
-                      exchange?.type == PriceType.Exchanged && styles.exchange,
-                      exchange?.type == PriceType.LivePrice && styles.livePrice
-                    )}
-                  >
-                    {exchange?.type}
-                  </td>
-                </tr>
-              ))
+            listToDisplay.map((exchange, i) => (
+              <tr key={i} className={styles.tr}>
+                <td className={styles.td}>
+                  {moment(exchange?.dateTime).format("DD/MM/yyyy HH:mm")}
+                </td>
+                <td className={styles.td}>{exchange?.currencyFrom?.abbr}</td>
+                <td className={styles.td}>
+                  {formatNumber(exchange?.amount1, 2)}
+                </td>
+                <td className={styles.td}>{exchange?.currencyTo?.name}</td>
+                <td className={clsx(styles.td, styles.number)}>
+                  {formatNumber(exchange?.amount2, 2)}
+                </td>
+                <td
+                  className={clsx(
+                    styles.td,
+                    exchange?.type == PriceType.Exchanged && styles.exchange,
+                    exchange?.type == PriceType.LivePrice && styles.livePrice
+                  )}
+                >
+                  {exchange?.type}
+                </td>
+              </tr>
+            ))
           }
         </tbody>
       </table>

@@ -1,5 +1,6 @@
 import { InMemoryCache, makeVar } from "@apollo/client";
 import { Exchange, PriceType, QueryInput } from "@src/generated/graphql";
+import { removeTimePart } from "@src/helpers/DateHelpers";
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -16,25 +17,11 @@ export const cache: InMemoryCache = new InMemoryCache({
 });
 
 export const filterFormDataVar = makeVar<QueryInput>({
-  fromDate: new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate(),
-    0,
-    0,
-    0,
-    0
-  ),
-  toDate: new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate(),
-    0,
-    0,
-    0,
-    0
-  ),
+  fromDate: removeTimePart(new Date()),
+  toDate: removeTimePart(new Date()),
   type: PriceType.All,
+  pageNumber: 1,
+  pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE as string),
 });
 
 export const latestRatesVar = makeVar<Array<Exchange>>([
@@ -296,3 +283,5 @@ export const latestRatesVar = makeVar<Array<Exchange>>([
     id: "62664721aae226d08c1572fa",
   },
 ]);
+
+export const listToDisplayVar = makeVar<Array<Exchange>>([]);

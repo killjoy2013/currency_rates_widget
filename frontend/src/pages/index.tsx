@@ -7,6 +7,12 @@ import styles from "@styles/Home.module.css";
 import clsx from "clsx";
 import { GetServerSideProps } from "next";
 import { HandlerProvider } from "@src/contexts/HandlerContext";
+import {
+  GetExchangesQuery,
+  GetExchangesQueryVariables,
+  PriceType,
+} from "@src/generated/graphql";
+import { removeTimePart } from "@src/helpers/DateHelpers";
 
 const Home = () => {
   return (
@@ -41,8 +47,18 @@ We wouldn't need to send another GraphQL post request from client when page load
 */
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo();
-  await apolloClient.query({
+
+  await apolloClient.query<GetExchangesQuery, GetExchangesQueryVariables>({
     query: Queries.GET_EXCHANGES,
+    variables: {
+      input: {
+        fromDate: removeTimePart(new Date()),
+        toDate: removeTimePart(new Date()),
+        type: PriceType.All,
+        pageNumber: 1,
+        pageSize: parseInt(process.env.PAGE_SIZE_SSR as string),
+      },
+    },
     fetchPolicy: "network-only",
   });
 

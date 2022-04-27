@@ -11,7 +11,7 @@ import {
   Transaction,
   useCreateExchangeMutation,
 } from "@src/generated/graphql";
-import { latestRatesVar } from "@src/lib/cache";
+import { latestRatesVar, listToDisplayVar } from "@src/lib/cache";
 import styles from "@styles/ExchangeForm.module.css";
 import genericStyles from "@styles/Generic.module.css";
 import Image from "next/image";
@@ -144,8 +144,6 @@ const Selected = ({ data }: { data: CurrencyItemType }) => (
 );
 
 const ExchangeForm = () => {
-  //get the handler from context
-  const { addExchangeToCache } = useContext(HandlerContext);
   //create the dispatcher
   const [state, dispatch] = useReducer(formStateReducer, initialFormState);
   //model window visibility
@@ -177,7 +175,10 @@ const ExchangeForm = () => {
       },
       onCompleted: ({ createExchange: transaction }) => {
         if (transaction.status == Status.Approved) {
-          addExchangeToCache([transaction.exchange]);
+          listToDisplayVar([
+            transaction.exchange,
+            ...listToDisplayVar().slice(0, 7),
+          ]);
         }
         setTransaction(transaction as Transaction);
         setShowModal(true);

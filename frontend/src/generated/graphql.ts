@@ -79,11 +79,13 @@ export type Query = {
 
 
 export type QueryGetExchangesArgs = {
-  input?: InputMaybe<QueryInput>;
+  input: QueryInput;
 };
 
 export type QueryInput = {
   fromDate?: InputMaybe<Scalars['Date']>;
+  pageNumber: Scalars['Int'];
+  pageSize: Scalars['Int'];
   toDate?: InputMaybe<Scalars['Date']>;
   type?: InputMaybe<PriceType>;
 };
@@ -100,7 +102,7 @@ export type Transaction = {
 };
 
 export type GetExchangesQueryVariables = Exact<{
-  input?: InputMaybe<QueryInput>;
+  input: QueryInput;
 }>;
 
 
@@ -115,7 +117,7 @@ export type CreateExchangeMutation = { __typename?: 'Mutation', createExchange: 
 
 
 export const GetExchangesDocument = gql`
-    query getExchanges($input: QueryInput) {
+    query getExchanges($input: QueryInput!) {
   getExchanges(input: $input) {
     id
     fakeCycleId
@@ -151,7 +153,7 @@ export const GetExchangesDocument = gql`
  *   },
  * });
  */
-export function useGetExchangesQuery(baseOptions?: Apollo.QueryHookOptions<GetExchangesQuery, GetExchangesQueryVariables>) {
+export function useGetExchangesQuery(baseOptions: Apollo.QueryHookOptions<GetExchangesQuery, GetExchangesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetExchangesQuery, GetExchangesQueryVariables>(GetExchangesDocument, options);
       }
@@ -352,7 +354,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getExchanges?: Resolver<Array<ResolversTypes['Exchange']>, ParentType, ContextType, Partial<QueryGetExchangesArgs>>;
+  getExchanges?: Resolver<Array<ResolversTypes['Exchange']>, ParentType, ContextType, RequireFields<QueryGetExchangesArgs, 'input'>>;
 };
 
 export type TransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = {

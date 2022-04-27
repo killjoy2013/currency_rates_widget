@@ -17,6 +17,7 @@ export class Faker {
   //   path: "/v1/exchangerate/",
   //   headers: { "X-CoinAPI-Key": "7EDA754C-640B-4C03-A138-EDB9FFB4909B" },
   //   //headers: { "X-CoinAPI-Key": "B951CEAB-0BE1-4991-AE0F-38491B0A785D" },
+  //   //headers: { "X-CoinAPI-Key": "57078CDC-C2BC-4FC7-ADC5-5359298880B5" },
   // };
 
   static options: any = {

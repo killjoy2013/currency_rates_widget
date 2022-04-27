@@ -37,6 +37,14 @@ export type Transaction = {
 
 export type CreateExchangeType = Omit<Exchange, "id">;
 
+export type QueryInputType = {
+  fromDate: Date;
+  toDate: Date;
+  type: PriceType;
+  pageSize: number;
+  pageNumber: number;
+};
+
 export type CoinApiResponse = {
   error: string;
   asset_id_base: string;
