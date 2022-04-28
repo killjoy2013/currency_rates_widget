@@ -3,7 +3,7 @@ import styles from "@styles/ExchangeListDesktop.module.css";
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import DateFilter from "../DateFilter";
 import Pagination from "../Pagination";
-import { Exchange, PriceType } from "@src/generated/graphql";
+import { Exchange, PriceType, CurrencyItemType } from "@src/generated/graphql";
 import moment from "moment";
 import { formatNumber } from "@src/helpers/TextHelpers";
 import clsx from "clsx";
@@ -22,25 +22,33 @@ interface ExchangeListDesktopProps {}
 Every <td> tag in the table <thead> part contains a funtionality.
 So, it's better to create a component and reuse it
 */
-interface ITd {
-  name: keyof Exchange;
+interface ITd<T> {
+  columnField?: keyof T | undefined;
+  columnName: keyof Exchange;
   sortAsc: boolean;
   sorting: boolean;
   label: string;
-  onClick: (name: keyof Exchange) => void;
+  onClick: <T>(
+    columnField: keyof T | undefined,
+    columnName: keyof Exchange
+  ) => void;
 }
-const Td: React.FC<ITd> = ({ name, sorting, sortAsc, label, onClick }) => {
+function Td<T>(props: ITd<T>) {
+  const { columnField, columnName, sorting, sortAsc, label, onClick } = props;
+
   return (
     <td
-      key={name}
-      className={clsx(styles.th, sorting && styles.sort)}
-      onClick={onClick.bind(null, name)}
+      key={columnName}
+      className={clsx(styles.th)}
+      onClick={() => onClick(columnField, columnName)}
     >
-      {sorting && (sortAsc ? <RiSortAsc /> : <RiSortDesc />)}
-      <span>{label}</span>
+      <div className={styles.sort}>
+        {sorting && (sortAsc ? <RiSortAsc /> : <RiSortDesc />)}
+        <span>{label}</span>
+      </div>
     </td>
   );
-};
+}
 
 const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
   props
@@ -55,10 +63,13 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
 
   const { sortList, queryExchange } = useContext(HandlerContext);
 
-  const sortListHandler = (name: keyof Exchange) => {
-    sortList(name, !sortAsc);
+  const sortListHandler = <TColumn,>(
+    columnField: keyof TColumn | undefined,
+    columnName: keyof Exchange
+  ) => {
+    sortList<TColumn>(columnField, columnName, !sortAsc);
     setSortAsc((prev) => !prev);
-    setSortField(name);
+    setSortField(columnName);
   };
 
   const queryHandler = (pageNumber: number) => {
@@ -73,43 +84,45 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
       <table className={styles.table}>
         <thead>
           <tr>
-            <Td
-              name="dateTime"
+            <Td<string>
+              columnName="dateTime"
               label="Date & Time"
               sorting={sortField == "dateTime"}
               sortAsc={sortAsc}
               onClick={sortListHandler}
             ></Td>
-            <Td
-              name="currencyFrom"
+            <Td<CurrencyItemType>
+              columnName="currencyFrom"
+              columnField="abbr"
               label="Currency From"
               sorting={sortField == "currencyFrom"}
               sortAsc={sortAsc}
               onClick={sortListHandler}
             ></Td>
-            <Td
-              name="amount1"
+            <Td<number>
+              columnName="amount1"
               label="Amount1"
               sorting={sortField == "amount1"}
               sortAsc={sortAsc}
               onClick={sortListHandler}
             ></Td>
-            <Td
-              name="currencyTo"
+            <Td<CurrencyItemType>
+              columnName="currencyTo"
+              columnField="name"
               label="Currency To"
               sorting={sortField == "currencyTo"}
               sortAsc={sortAsc}
               onClick={sortListHandler}
             ></Td>
-            <Td
-              name="amount2"
+            <Td<number>
+              columnName="amount2"
               label="Amount2"
               sorting={sortField == "amount2"}
               sortAsc={sortAsc}
               onClick={sortListHandler}
             ></Td>
-            <Td
-              name="type"
+            <Td<PriceType>
+              columnName="type"
               label="Type"
               sorting={sortField == "type"}
               sortAsc={sortAsc}

@@ -20,12 +20,21 @@ this way, we avoid prop drilling no metter where the component is in the compone
 */
 
 interface IHandlerContext {
-  sortList: (field: keyof Exchange, sortAsc: boolean) => void;
+  sortList: <TColumn>(
+    columnField: keyof TColumn | undefined,
+    columnName: keyof Exchange,
+    sortAsc: boolean
+  ) => void;
+
   queryExchange: () => void;
 }
 
 const defaultState = {
-  sortList: (field: keyof Exchange, sortAsc: boolean) => {},
+  sortList: <TColumn,>(
+    columnField: keyof TColumn | undefined,
+    columnName: keyof Exchange,
+    sortAsc: boolean
+  ) => {},
   queryExchange: () => {},
 };
 
@@ -65,28 +74,60 @@ const HandlerProvider: React.FC<IHandlerProvider> = ({ children }) => {
     }
   }, [socketRef.current]);
 
-  const sortList = (field: keyof Exchange, sortAsc: boolean) => {
-    listToDisplayVar([
-      ...listToDisplayVar().sort((a, b) => {
-        if (sortAsc) {
-          if (a[field] < b[field]) {
-            return -1;
-          } else if (a[field] < b[field]) {
-            return 1;
+  const sortList = <TColumn,>(
+    columnField: keyof TColumn | undefined,
+    columnName: keyof Exchange,
+    sortAsc: boolean
+  ) => {
+    if (!columnField) {
+      listToDisplayVar([
+        ...listToDisplayVar().sort((a, b) => {
+          if (sortAsc) {
+            if (a[columnName] < b[columnName]) {
+              return -1;
+            } else if (a[columnName] < b[columnName]) {
+              return 1;
+            } else {
+              return 0;
+            }
           } else {
-            return 0;
+            if (a[columnName] > b[columnName]) {
+              return -1;
+            } else if (a[columnName] < b[columnName]) {
+              return 1;
+            } else {
+              return 0;
+            }
           }
-        } else {
-          if (a[field] > b[field]) {
-            return -1;
-          } else if (a[field] < b[field]) {
-            return 1;
+        }),
+      ]);
+    } else {
+      listToDisplayVar([
+        ...listToDisplayVar().sort((a, b) => {
+          if (sortAsc) {
+            if (a[columnName][columnField] < b[columnName][columnField]) {
+              return -1;
+            } else if (
+              a[columnName][columnField] < b[columnName][columnField]
+            ) {
+              return 1;
+            } else {
+              return 0;
+            }
           } else {
-            return 0;
+            if (a[columnName][columnField] > b[columnName][columnField]) {
+              return -1;
+            } else if (
+              a[columnName][columnField] < b[columnName][columnField]
+            ) {
+              return 1;
+            } else {
+              return 0;
+            }
           }
-        }
-      }),
-    ]);
+        }),
+      ]);
+    }
   };
 
   const queryExchange = async () => {
