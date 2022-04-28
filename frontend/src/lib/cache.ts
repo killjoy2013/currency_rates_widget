@@ -285,3 +285,5 @@ export const latestRatesVar = makeVar<Array<Exchange>>([
 ]);
 
 export const listToDisplayVar = makeVar<Array<Exchange>>([]);
+
+export const currentPageNumberVar = makeVar<number>(1);

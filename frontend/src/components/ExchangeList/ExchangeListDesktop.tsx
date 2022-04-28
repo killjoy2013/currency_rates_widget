@@ -1,4 +1,9 @@
-import React, { useState, FunctionComponent, useContext } from "react";
+import React, {
+  useState,
+  FunctionComponent,
+  useContext,
+  useEffect,
+} from "react";
 import styles from "@styles/ExchangeListDesktop.module.css";
 import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import DateFilter from "../DateFilter";
@@ -8,7 +13,11 @@ import moment from "moment";
 import { formatNumber } from "@src/helpers/TextHelpers";
 import clsx from "clsx";
 import { HandlerContext } from "@src/contexts/HandlerContext";
-import { filterFormDataVar, listToDisplayVar } from "@src/lib/cache";
+import {
+  currentPageNumberVar,
+  filterFormDataVar,
+  listToDisplayVar,
+} from "@src/lib/cache";
 import { useReactiveVar } from "@apollo/client";
 
 /*
@@ -59,6 +68,7 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
   */
   const [sortAsc, setSortAsc] = useState<boolean>(false);
   const [sortField, setSortField] = useState<keyof Exchange>("dateTime");
+
   const listToDisplay = useReactiveVar(listToDisplayVar);
 
   const { sortList, queryExchange } = useContext(HandlerContext);
@@ -73,9 +83,15 @@ const ExchangeListDesktop: FunctionComponent<ExchangeListDesktopProps> = (
   };
 
   const queryHandler = (pageNumber: number) => {
+    currentPageNumberVar(pageNumber);
     filterFormDataVar({ ...filterFormDataVar(), pageNumber });
     queryExchange();
   };
+
+  useEffect(() => {
+    setSortAsc(false);
+    setSortField("dateTime");
+  }, [currentPageNumberVar()]);
 
   return (
     <div className={styles.desktop}>
