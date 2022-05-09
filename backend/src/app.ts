@@ -74,7 +74,7 @@ I'd like keep using GraphQL Playground, so need to enable it explicitly
   ExchangeCollector class is responsible of collecting exchange data from CoinAPI.  
   Name of the class is Faker, newertheless it's collecting exchange data from CoinAPI.  
   */
-  await Faker.startFake();
+  //await Faker.startFake();
 }
 
 startServer();
